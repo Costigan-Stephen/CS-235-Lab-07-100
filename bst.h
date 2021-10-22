@@ -14,7 +14,7 @@
  *        BST                 : A class that represents a binary search tree
  *        BST::iterator       : An iterator through BST
  * Author
- *    Stephen Costigan
+ *    Stephen Costigan, Alexander Dohms
  ************************************************************************/
 
 #pragma once
