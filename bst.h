@@ -447,7 +447,7 @@ void BST <T> ::BNode::addRight(T && t)
  * advance by one
  *************************************************/
 template <typename T>
-typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ ()
+typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ () 
 {
    return *this;  
 }
