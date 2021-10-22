@@ -160,31 +160,23 @@ class BST <T> :: iterator
 {
 public:
    // constructors and assignment
-   iterator(BNode * p = nullptr)          
-   { 
-   }
-   iterator(const iterator & rhs)         
-   { 
-   }
+   iterator(BNode* p = nullptr) { pNode = p; }
+   iterator(const iterator& rhs) { pNode = rhs.pNode; }
    iterator & operator = (const iterator & rhs)
    {
-      return *this;
+       this->pNode = rhs.pNode;
+       return *this;
    }
 
    // compare
-   bool operator == (const iterator & rhs) const
-   {
-      return true;
-   }
-   bool operator != (const iterator & rhs) const
-   {
-      return true;
-   }
+   bool operator != (const iterator& rhs) const { return (rhs.pNode != pNode ? true : false); }
+   bool operator == (const iterator& rhs) const { return (rhs.pNode == pNode ? true : false); }
 
    // de-reference. Cannot change because it will invalidate the BST
    const T & operator * () const 
    {
-      return *(new T);
+       return pNode->data;
+      /*return *(new T);*/ 
    }
 
    // increment and decrement
@@ -198,6 +190,7 @@ public:
    {
       return *this;;
    }
+   
 
    // must give friend status to remove so it can call getNode() from it
    friend BST <T> :: iterator BST <T> :: erase(iterator & it);
