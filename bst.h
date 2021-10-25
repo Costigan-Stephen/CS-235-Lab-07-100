@@ -43,14 +43,14 @@ class BST
 {
 public:
    //
-   // Construct
+   // Construct - Finished | Alexander
    //
 
-   BST();
-   BST(const BST &  rhs);
-   BST(      BST && rhs);
-   BST(const std::initializer_list<T>& il);
-   ~BST();
+   BST() : root(nullptr), numElements(0) {}                                                                          //Default Constructor
+   BST(const BST &  rhs) : root(nullptr), numElements(0) {*this = rhs;}                                              //Copy constructor
+   BST(      BST && rhs) : root(rhs.root), numElements(rhs.numElements) {rhs.root = nullptr; rhs.numElements = 0;}   //Move Constructor
+   BST(const std::initializer_list<T>& il) : root(nullptr), numElements(0) {*this = il;}                             //Initializer List Constructor
+   ~BST() {clear();}                                                                                                 //Deconstructor
 
    //
    // Assign
@@ -213,51 +213,6 @@ private:
  *********************************************
  *********************************************
  *********************************************/
-
-
- /*********************************************
-  * BST :: DEFAULT CONSTRUCTOR - Finished | Alexander
-  ********************************************/
-template <typename T>
-BST <T> ::BST()
-{
-   root = nullptr;
-   numElements = 0;
-}
-
-/*********************************************
- * BST :: COPY CONSTRUCTOR
- * Copy one tree to another
- ********************************************/
-template <typename T>
-BST <T> :: BST ( const BST<T>& rhs) 
-{
-   numElements = rhs->numEle;
-   root = new BNode;
-   //Can you call the default constructor to set root and num to null?
-   //   BST();
-   
-}
-
-/*********************************************
- * BST :: MOVE CONSTRUCTOR
- * Move one tree to another
- ********************************************/
-template <typename T>
-BST <T> :: BST(BST <T> && rhs) 
-{
-   numElements = 99;
-   root = new BNode;
-}
-
-/*********************************************
- * BST :: DESTRUCTOR
- ********************************************/
-template <typename T>
-BST <T> :: ~BST()
-{
-
-}
 
 
 /*********************************************
