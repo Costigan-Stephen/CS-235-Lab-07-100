@@ -252,7 +252,7 @@ BST <T> & BST <T> :: operator = (BST <T> && rhs)
 template <typename T>
 void BST <T> :: swap (BST <T>& rhs)
 {
-
+//   BST<T>& tempRoot = rhs.root;
 }
 
 /*****************************************************
@@ -290,7 +290,18 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
-
+   
+   //Example from pList
+   // loop is unnecessary for the checks, but probably good practice
+//   while (pParent != NULL)
+//   {
+//      BNode* pDelete = pParent;
+//       pParent = pHead->pNext;
+//       delete pDelete;
+//   }
+//   pTail = nullptr;
+   
+   numElements = 0;
 }
 
 /*****************************************************
@@ -330,7 +341,7 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
 template <typename T>
 void BST <T> :: BNode :: addLeft (BNode * pNode)
 {
-
+   pParent = pLeft;
 }
 
 /******************************************************
@@ -340,7 +351,7 @@ void BST <T> :: BNode :: addLeft (BNode * pNode)
 template <typename T>
 void BST <T> :: BNode :: addRight (BNode * pNode)
 {
-
+   pParent = pRight;
 }
 
 /******************************************************
@@ -350,7 +361,7 @@ void BST <T> :: BNode :: addRight (BNode * pNode)
 template <typename T>
 void BST<T> :: BNode :: addLeft (const T & t)
 {
-
+   t = pLeft;
 }
 
 /******************************************************
