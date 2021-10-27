@@ -43,7 +43,7 @@ class BST
 {
 public:
    //
-   // Construct
+   // Construct - Finished | Alexander
    //
 
     BST() : root(nullptr), numElements(0) {}                                                                          //Default Constructor
@@ -305,7 +305,18 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
-
+   
+   //Example from pList
+   // loop is unnecessary for the checks, but probably good practice
+//   while (pParent != NULL)
+//   {
+//      BNode* pDelete = pParent;
+//       pParent = pHead->pNext;
+//       delete pDelete;
+//   }
+//   pTail = nullptr;
+   
+   numElements = 0;
 }
 
 /*****************************************************
@@ -358,10 +369,7 @@ void BST <T> :: BNode :: addLeft (BNode * pNode)
 template <typename T>
 void BST <T> :: BNode :: addRight (BNode * pNode)
 {
-    // does not increase %
-    if (pNode)
-        pParent = pNode->pParent;
-    pRight = pNode->pRight;
+   pParent = pRight;
 }
 
 /******************************************************
@@ -374,6 +382,7 @@ void BST<T> :: BNode :: addLeft (const T & t)
     // does not increase %
     if (t)
         this.pLeft->data = new BNode(t);
+   t = pLeft;
 }
 
 /******************************************************
