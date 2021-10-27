@@ -46,11 +46,11 @@ public:
    // Construct
    //
 
-   BST();
-   BST(const BST &  rhs);
-   BST(      BST && rhs);
-   BST(const std::initializer_list<T>& il);
-   ~BST();
+    BST() : root(nullptr), numElements(0) {}                                                                          //Default Constructor
+    BST(const BST& rhs) : root(nullptr), numElements(0) { *this = rhs; }                                              //Copy constructor 
+    BST(BST&& rhs) : root(rhs.root), numElements(rhs.numElements) { rhs.root = nullptr; rhs.numElements = 0; }   //Move Constructor
+    BST(const std::initializer_list<T>& il) : root(nullptr), numElements(0) { *this = il; }                             //Initializer List Constructor
+    ~BST() { clear(); }
 
    //
    // Assign
@@ -138,8 +138,8 @@ public:
    // 
    // Status
    //
-   bool isRightChild(BNode * pNode) const { return true; }
-   bool isLeftChild( BNode * pNode) const { return true; }
+   bool isRightChild(BNode* pNode) const { return pNode->pParent > pParent; } // DON'T KNOW IF IT CHANGES ANYTHING
+   bool isLeftChild (BNode* pNode) const { return pNode->pParent < pParent; } // <-/
 
    //
    // Data
@@ -190,7 +190,6 @@ public:
    {
       return *this;;
    }
-   
 
    // must give friend status to remove so it can call getNode() from it
    friend BST <T> :: iterator BST <T> :: erase(iterator & it);
@@ -208,54 +207,11 @@ private:
 
 /*********************************************
  *********************************************
- *********************************************
- ******************** BST ********************
- *********************************************
+ *******************       *******************
+ *******************  BST  *******************
+ *******************       *******************
  *********************************************
  *********************************************/
-
-
- /*********************************************
-  * BST :: DEFAULT CONSTRUCTOR
-  ********************************************/
-template <typename T>
-BST <T> ::BST()
-{
-   numElements = 99;
-   root = new BNode;
-}
-
-/*********************************************
- * BST :: COPY CONSTRUCTOR
- * Copy one tree to another
- ********************************************/
-template <typename T>
-BST <T> :: BST ( const BST<T>& rhs) 
-{
-   numElements = 99;
-   root = new BNode;
-}
-
-/*********************************************
- * BST :: MOVE CONSTRUCTOR
- * Move one tree to another
- ********************************************/
-template <typename T>
-BST <T> :: BST(BST <T> && rhs) 
-{
-   numElements = 99;
-   root = new BNode;
-}
-
-/*********************************************
- * BST :: DESTRUCTOR
- ********************************************/
-template <typename T>
-BST <T> :: ~BST()
-{
-
-}
-
 
 /*********************************************
  * BST :: ASSIGNMENT OPERATOR
@@ -264,7 +220,9 @@ BST <T> :: ~BST()
 template <typename T>
 BST <T> & BST <T> :: operator = (const BST <T> & rhs)
 {
-   return *this;
+    root->assign(root, rhs.root);
+    numElements = rhs.numElements;
+    return *this;
 }
 
 /*********************************************
@@ -274,6 +232,10 @@ BST <T> & BST <T> :: operator = (const BST <T> & rhs)
 template <typename T>
 BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
 {
+    clear();
+    for (T t : il) {
+        insert(t); // WILL PROB INCREASE % WHEN INSERT IS DONE
+    }
    return *this;
 }
 
@@ -358,9 +320,9 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
 
 /******************************************************
  ******************************************************
- ******************************************************
- *********************** B NODE ***********************
- ******************************************************
+ **********************          **********************
+ **********************  B NODE  **********************
+ **********************          **********************
  ******************************************************
  ******************************************************/
 
@@ -429,9 +391,9 @@ void BST <T> ::BNode::addRight(T && t)
 
 /*************************************************
  *************************************************
- *************************************************
- ****************** ITERATOR *********************
- *************************************************
+ *****************            ********************
+ *****************  ITERATOR  ********************
+ *****************            ********************
  *************************************************
  *************************************************/     
 
