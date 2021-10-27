@@ -135,6 +135,9 @@ public:
    void addLeft(       T && t);
    void addRight(      T && t);
 
+   void assign(BNode* pDest, const BNode* pSrc);
+   void clear(BNode* pThis);
+
    // 
    // Status
    //
@@ -246,7 +249,9 @@ BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
 template <typename T>
 BST <T> & BST <T> :: operator = (BST <T> && rhs)
 {
-   return *this;
+    clear();
+    swap(rhs);
+    return *this;
 }
 
 /*********************************************
@@ -256,7 +261,13 @@ BST <T> & BST <T> :: operator = (BST <T> && rhs)
 template <typename T>
 void BST <T> :: swap (BST <T>& rhs)
 {
+    auto tempRoot = rhs.root;
+    rhs.root = root;
+    root = tempRoot;
 
+    auto tempElements = rhs.numElements;
+    rhs.numElements = numElements;
+    numElements = tempElements;
 }
 
 /*****************************************************
@@ -334,7 +345,10 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
 template <typename T>
 void BST <T> :: BNode :: addLeft (BNode * pNode)
 {
-
+    // does not increase % 
+    if (pNode)
+        pParent = pNode->pParent;
+    pLeft = pNode->pLeft;
 }
 
 /******************************************************
@@ -344,7 +358,10 @@ void BST <T> :: BNode :: addLeft (BNode * pNode)
 template <typename T>
 void BST <T> :: BNode :: addRight (BNode * pNode)
 {
-
+    // does not increase %
+    if (pNode)
+        pParent = pNode->pParent;
+    pRight = pNode->pRight;
 }
 
 /******************************************************
@@ -354,7 +371,9 @@ void BST <T> :: BNode :: addRight (BNode * pNode)
 template <typename T>
 void BST<T> :: BNode :: addLeft (const T & t)
 {
-
+    // does not increase %
+    if (t)
+        this.pLeft->data = new BNode(t);
 }
 
 /******************************************************
@@ -364,7 +383,9 @@ void BST<T> :: BNode :: addLeft (const T & t)
 template <typename T>
 void BST<T> ::BNode::addLeft(T && t)
 {
-
+    // does not increase %
+    if (t)
+        this.pLeft->data = new BNode(t);
 }
 
 /******************************************************
@@ -374,7 +395,9 @@ void BST<T> ::BNode::addLeft(T && t)
 template <typename T>
 void BST <T> :: BNode :: addRight (const T & t)
 {
-
+    // does not increase %
+    if (t)
+        this.pRight->data = new BNode(t);
 }
 
 /******************************************************
@@ -384,7 +407,9 @@ void BST <T> :: BNode :: addRight (const T & t)
 template <typename T>
 void BST <T> ::BNode::addRight(T && t)
 {
-
+    // does not increase %
+    if (t)
+        this.pRight->data = new BNode(t);
 }
 
 
@@ -418,6 +443,57 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
 
 }
 
+/**********************************************
+ * assign
+ * copy the values from pSrc onto pDest preserving
+ * as many of the nodes as possible.
+ *********************************************/
+template <typename T>
+void BST<T> ::BNode::assign(BST<T> ::BNode* pDest, const BST<T> ::BNode* pSrc)
+{
+
+    // Source is Empty
+    if (!pSrc) {
+        clear(pDest);
+        return;
+    }
+
+    // Neither the Source nor Destination are Empty
+    if (pDest && pSrc) {
+        pDest->data = pSrc->data;
+        assign(pDest->pRight, pSrc->pRight);
+        assign(pDest->pLeft, pSrc->pLeft);
+    }
+
+    // Destination is Empty
+    if (!pDest && pSrc) {
+        pDest = new BST::BNode(pSrc->data);
+        assign(pDest->pRight, pSrc->pRight);
+        assign(pDest->pLeft, pSrc->pLeft);
+    }
+
+    // Setting parent values
+    if (pDest->pRight)
+        pDest->pRight->pParent = pDest;
+    if (pDest->pLeft)
+        pDest->pLeft->pParent = pDest;
+}
+
+/*****************************************************
+ * DELETE BINARY TREE
+ * Delete all the nodes below pThis including pThis
+ * using postfix traverse: LRV
+ ****************************************************/
+template <class T>
+void BST<T>::BNode::clear(BNode* pThis)
+{
+    if (!pThis)
+        return;
+
+    clear(pThis->pLeft);
+    clear(pThis->pRight);
+    pThis = NULL;
+}
 
 } // namespace custom
 
