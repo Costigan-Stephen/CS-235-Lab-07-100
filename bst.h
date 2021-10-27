@@ -315,7 +315,8 @@ void BST <T> ::clear() noexcept
 //       delete pDelete;
 //   }
 //   pTail = nullptr;
-   
+ 
+   root = nullptr;
    numElements = 0;
 }
 
@@ -369,7 +370,11 @@ void BST <T> :: BNode :: addLeft (BNode * pNode)
 template <typename T>
 void BST <T> :: BNode :: addRight (BNode * pNode)
 {
-   pParent = pRight;
+    //pParent = pRight;
+    // does not increase % 
+    if (pNode)
+        pParent = pNode->pParent;
+    pRight = pNode->pRight;
 }
 
 /******************************************************
@@ -379,10 +384,11 @@ void BST <T> :: BNode :: addRight (BNode * pNode)
 template <typename T>
 void BST<T> :: BNode :: addLeft (const T & t)
 {
+    //t = pLeft;
     // does not increase %
     if (t)
         this.pLeft->data = new BNode(t);
-   t = pLeft;
+   
 }
 
 /******************************************************
