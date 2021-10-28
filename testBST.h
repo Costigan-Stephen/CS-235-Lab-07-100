@@ -1638,7 +1638,6 @@ public:
       // verify
       assertUnit(Spy::numEquals() == 3);      // check [50][30][40]
       assertUnit(Spy::numLessthan() == 3);    // compare [50][30][40]
-      std::cout << Spy::numLessthan() << std::endl;
       assertUnit(Spy::numDestructor() == 0);
       assertUnit(Spy::numDelete() == 0);
       assertUnit(Spy::numAssign() == 0);

@@ -495,6 +495,7 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
     iterator it = iterator(p);
     while (p != nullptr)
     {
+        it++;
         if (p->data == t)
         {
             return iterator(p);
@@ -508,7 +509,7 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
         {
             p = p->pLeft;
         }
-        it++;
+        
     }
 
 }
