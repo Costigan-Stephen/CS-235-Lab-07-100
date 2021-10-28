@@ -351,6 +351,8 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
    //}
    //else
    //{ }
+
+   //This takes care of a new insert into nothing
     std::pair<iterator, bool> pairReturn(end(), false);
     if (!root)
     {
@@ -363,7 +365,7 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
     }    
     BNode* p = root;
     iterator it = iterator(p);
-    
+    //This loop is used to get to the end
     while (p != nullptr)
     {
         it++;
@@ -380,6 +382,7 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
                 //p->addRight(t); //this should work after add right functions are finished
                 pairReturn.first = iterator(p->pRight);
                 pairReturn.second = true;
+                return pairReturn;
             }
             p = p->pRight;             
         }
@@ -390,6 +393,7 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
                 //p->addLeft(t); //this should work after add left functions are finished
                 pairReturn.first = iterator(p->pLeft);
                 pairReturn.second = true;
+                return pairReturn;
             }
             p = p->pLeft;
         }
