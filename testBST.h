@@ -41,7 +41,7 @@ public:
       test_constructMove_empty();
       test_constructMove_one();
       test_constructMove_standard();
-
+      
       // Assign
       test_assign_emptyToEmpty();
       test_assign_standardToEmpty();
@@ -59,7 +59,7 @@ public:
       test_swap_standardToEmpty();
       test_swap_emptyToStandard();
       test_swap_standardToStandard();
-
+      
       // Iterator
       test_begin_empty();
       test_begin_standard();
@@ -87,7 +87,7 @@ public:
       test_insertMove_oneRight();
       test_insertMove_duplicate();
       test_insertMove_keepUnique();
-
+      
       // Remove
       test_erase_empty();
       test_erase_standardMissing();
@@ -96,7 +96,7 @@ public:
       test_erase_twoChildren();
       test_clear_empty();
       test_clear_standard();
-
+      
       // Status
       test_empty_empty();
       test_empty_standard();
