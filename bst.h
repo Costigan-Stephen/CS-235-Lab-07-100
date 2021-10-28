@@ -194,7 +194,6 @@ public:
        iterator it = *this;
        ++(*this);
        return it;
-       /*return *this;*/
    }
    iterator & operator -- ();
    iterator   operator -- (int postfix)
@@ -202,7 +201,6 @@ public:
        iterator it = *this;
        --(*this); 
        return it;
-      //return *this;
    }
 
    // must give friend status to remove so it can call getNode() from it
@@ -512,7 +510,6 @@ void BST <T> :: BNode :: addRight (BNode * pNode)
 template <typename T>
 void BST<T> :: BNode :: addLeft (const T & t)
 {
-    //t = pLeft;
     // does not increase %
     if (t)
         this.pLeft->data = new BNode(t);
