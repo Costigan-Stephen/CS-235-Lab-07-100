@@ -444,7 +444,7 @@ inline void BST<T>::removeNode(BNode* pNode)
 template <typename T>
 typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
 {
-   return end();
+   return root;
 } 
  
 
@@ -668,18 +668,18 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
         return *this;
     }
 
-    BNode* pSave = pNode;
+    BNode* pAdd = pNode;
     pNode = pNode->pParent;
 
     if (pNode == nullptr)
         return *this;
 
-    if (pSave == pNode->pRight)
+    if (pAdd == pNode->pRight)
         return *this;
 
-    while (pNode != nullptr && pSave == pNode->pLeft)
+    while (pNode != nullptr && pAdd == pNode->pLeft)
     {
-        pSave = pNode;
+        pAdd = pNode;
         pNode = pNode->pParent;
     }
 
