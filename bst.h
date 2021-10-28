@@ -615,7 +615,33 @@ void BST <T> ::BNode::addRight(T && t)
 template <typename T>
 typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ () 
 {
-   return *this;  
+    if (pNode == nullptr )
+        return *this;
+
+    if (pNode->pRight != nullptr) 
+    {
+        pNode = pNode->pRight;
+        while (pNode->pLeft)
+        {
+            pNode = pNode->pLeft;
+        }
+        return *this;
+    }
+
+    BNode* pNew = pNode;
+    pNode = pNode->pParent;
+
+    if (pNew == pNode->pRight)
+    {
+        while (pNode != nullptr && pNew > pNode)
+        {
+            pNode = pNode->pParent;
+        }
+
+        return *this;
+    }
+
+    return *this;
 }
 
 /**************************************************
