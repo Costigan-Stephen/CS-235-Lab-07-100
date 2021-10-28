@@ -18,7 +18,7 @@
  ************************************************************************/
 
 #pragma once
-
+ 
 #ifdef DEBUG
 #define debug(x) x
 #else // !DEBUG
@@ -66,7 +66,7 @@ public:
        return !(lhs->data > rhs->data);
    }
    inline friend bool & operator > (const BST& lhs, const BST& rhs)
-   {  // the distance from the origin
+   {
        return !(lhs->data < rhs->data);
    }
 
@@ -161,9 +161,9 @@ public:
    // Data
    //
    T data;                  // Actual data stored in the BNode
-   BNode* pLeft;          // Left child - smaller
-   BNode* pRight;         // Right child - larger
-   BNode* pParent;        // Parent
+   BNode* pLeft;            // Left child - smaller
+   BNode* pRight;           // Right child - larger
+   BNode* pParent;          // Parent
    bool isRed;              // Red-black balancing stuff
 };
 
@@ -180,13 +180,13 @@ public:
    iterator(const iterator& rhs) { pNode = rhs.pNode; }
    iterator & operator = (const iterator & rhs)
    {
-       this->pNode = rhs.pNode;
-       return *this;
+        this->pNode = nullptr;
+        return *this;
    }
 
    // compare
-   bool operator != (const iterator& rhs) const { return rhs.pNode != pNode ; }
-   bool operator == (const iterator& rhs) const { return rhs.pNode == pNode ; }
+   bool operator != (const iterator& rhs) const { return rhs.pNode != this->pNode ; }
+   bool operator == (const iterator& rhs) const { return rhs.pNode == this->pNode ; }
 
    // de-reference. Cannot change because it will invalidate the BST
    const T & operator * () const 
@@ -205,7 +205,7 @@ public:
        }
        pNode = nullptr;
        return pNode;
-      /*return *this;*/
+       /*return *this;*/
    }
    iterator & operator -- ();
    iterator   operator -- (int postfix)
@@ -381,40 +381,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             newNode = nullptr;
         }
     }*/ 
-
-    /*/ if (root == NULL)
-        return NULL;
-    if (root->pLeft == NULL && root->pRight == NULL) {
-        free(root);
-        return NULL;
-    }
-    root->pLeft = BST(root->left);
-    root->pRight = BST(root->right);
-
-    / if (root == NULL)
-        return NULL;
-    else if (BST < root->data)
-        root->pLeft = clear(root->pLeft, BST);
-    else if (BST > root->data)
-        root->pRight = clear(root->pRight, BST);
-    else {
-        if (root == NULL && root->pRight == NULL)
-        {
-            delete root;
-            root = NULL;
-        }
-        else if (root->pLeft == NULL)
-        {
-
-        }/
-            / if (!root || root->data == 0)return;
-        if (root->pRight == NULL) return root->pLeft;
-        auto x = root->pRight;
-        while (x->pLeft)x = x->pLeft;
-        x->pLeft = root->pLeft;
-        return root->pRight;
-        return end(); */
-    return end();*/
+    return end();
 
    /*return end();*/
 }
@@ -481,8 +448,8 @@ template <typename T>
 typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
 {
    return end();
-}
-
+} 
+ 
 
 /****************************************************
  * BST :: FIND
@@ -491,7 +458,60 @@ typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
 template <typename T>
 typename BST <T> :: iterator BST<T> :: find(const T & t)
 {
-   return end(); 
+    /*Iterator method
+     BST.find(value)
+     p <- root
+     WHILE p != NULL
+         IF p.data = value
+         RETURN iterator(p)
+         ELSEIF value < p.data
+         p <- p.pLeft
+         ELSE
+         p <- p.pRight
+     RETURN end()
+     */
+     //BNode* p = new BNode(t);
+     //BNode* p = root;
+     //p->data = t;
+     //BNode* r = root;
+     //while (r != nullptr)
+     //{
+     //    if (p->data == r->data)
+     //    {
+     //        return iterator(p);
+     //    }
+     //    else if (p->isRightChild(p))
+     //    {
+     //        r = r->pLeft;
+     //    }
+     //    else if (p->isLeftChild(p))
+     //    {
+     //        r = r->pRight;
+     //    }
+     //    else
+     //    {
+     //        return nullptr;
+     //    }
+     //
+     //}
+    BNode* p = root;
+    while (p != nullptr)
+    {
+        if (p->data == t)
+        {
+            return iterator(p);
+            /*return nullptr;*/
+        }
+        else if (p->data < t) 
+        {
+            p = p->pRight;
+        }
+        else if (t < p->data)
+        {
+            p = p->pLeft;
+        }
+    }
+
 }
 
 
