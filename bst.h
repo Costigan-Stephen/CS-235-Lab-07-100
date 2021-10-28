@@ -381,7 +381,40 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             newNode = nullptr;
         }
     }*/ 
-    return end();
+
+    /*/ if (root == NULL)
+        return NULL;
+    if (root->pLeft == NULL && root->pRight == NULL) {
+        free(root);
+        return NULL;
+    }
+    root->pLeft = BST(root->left);
+    root->pRight = BST(root->right);
+
+    / if (root == NULL)
+        return NULL;
+    else if (BST < root->data)
+        root->pLeft = clear(root->pLeft, BST);
+    else if (BST > root->data)
+        root->pRight = clear(root->pRight, BST);
+    else {
+        if (root == NULL && root->pRight == NULL)
+        {
+            delete root;
+            root = NULL;
+        }
+        else if (root->pLeft == NULL)
+        {
+
+        }/
+            / if (!root || root->data == 0)return;
+        if (root->pRight == NULL) return root->pLeft;
+        auto x = root->pRight;
+        while (x->pLeft)x = x->pLeft;
+        x->pLeft = root->pLeft;
+        return root->pRight;
+        return end(); */
+    return end();*/
 
    /*return end();*/
 }
