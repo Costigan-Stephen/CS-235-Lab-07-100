@@ -201,24 +201,18 @@ public:
    iterator & operator ++ ();
    iterator   operator ++ (int postfix)
    {
-       if (pNode->pNext) {
-           pNode = pNode->pNext;
-           return pNode;
-       }
-       pNode = nullptr;
-       return pNode;
+       iterator it = *this;
+       ++(*this);
+       return it;
        /*return *this;*/
    }
    iterator & operator -- ();
    iterator   operator -- (int postfix)
    {
-       if (pNode->pNext) {
-           pNode = pNode->pPrev;
-           return pNode;
-       }
-       pNode = nullptr;
-       return pNode;
-      return *this;
+       iterator it = *this;
+       --(*this); 
+       return it;
+      //return *this;
    }
 
    // must give friend status to remove so it can call getNode() from it
