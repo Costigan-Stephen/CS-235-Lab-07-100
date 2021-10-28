@@ -182,7 +182,8 @@ public:
    iterator(const iterator& rhs) { pNode = rhs.pNode; }
    iterator & operator = (const iterator & rhs)
    {
-        this->pNode = nullptr;
+       if (&rhs != nullptr)
+            pNode = nullptr;
         return *this;
    }
 
@@ -491,6 +492,7 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
      //
      //}
     BNode* p = root;
+    iterator it = iterator(p);
     while (p != nullptr)
     {
         if (p->data == t)
@@ -498,14 +500,15 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
             return iterator(p);
             /*return nullptr;*/
         }
-        else if (p->data < t) 
+        else if (p->data < t)
         {
             p = p->pRight;
         }
-        else if (t < p->data)
+        else
         {
             p = p->pLeft;
         }
+        it++;
     }
 
 }
