@@ -495,7 +495,7 @@ void BST<T> :: BNode :: addLeft (const T & t)
 {
     // does not increase %
     if (t)
-        this.pLeft->data = new BNode(t);
+        pLeft->data = new BNode(t);
    
 }
 
@@ -508,7 +508,7 @@ void BST<T> ::BNode::addLeft(T && t)
 {
     // does not increase %
     if (t)
-        this.pLeft->data = new BNode(t);
+        pLeft->data = new BNode(t);
 }
 
 /******************************************************
@@ -520,7 +520,7 @@ void BST <T> :: BNode :: addRight (const T & t)
 {
     // does not increase %
     if (t)
-        this.pRight->data = new BNode(t);
+        pRight->data = new BNode(t);
 }
 
 /******************************************************
@@ -532,7 +532,7 @@ void BST <T> ::BNode::addRight(T && t)
 {
     // does not increase %
     if (t)
-        this.pRight->data = new BNode(t);
+        pRight->data = new BNode(t);
 }
 
 /*************************************************
