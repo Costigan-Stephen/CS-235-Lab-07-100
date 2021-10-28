@@ -178,11 +178,12 @@ class BST <T> :: iterator
 {
 public:
    // constructors and assignment
-   iterator(BNode* p = nullptr) { pNode = p; }
+   iterator(BNode* p = nullptr): pNode(p) { }
    iterator(const iterator& rhs) { pNode = rhs.pNode; }
    iterator & operator = (const iterator & rhs)
    {
-        this->pNode = nullptr;
+        if (&rhs != nullptr)
+            pNode = rhs.pNode;
         return *this;
    }
 
@@ -615,30 +616,31 @@ void BST <T> ::BNode::addRight(T && t)
 template <typename T>
 typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ () 
 {
-    if (pNode == nullptr )
+    if (pNode == nullptr)
         return *this;
 
-    if (pNode->pRight != nullptr) 
+    if (pNode->pRight != nullptr)
     {
         pNode = pNode->pRight;
+
         while (pNode->pLeft)
-        {
             pNode = pNode->pLeft;
-        }
         return *this;
     }
 
-    BNode* pNew = pNode;
-    pNode = pNode->pParent;
+    BNode* pAdd = pNode;
+    pNode = pNode->pParent; 
 
-    if (pNew == pNode->pRight)
-    {
-        while (pNode != nullptr && pNew > pNode)
-        {
-            pNode = pNode->pParent;
-        }
-
+    if (pNode == nullptr)
         return *this;
+
+    if (pAdd == pNode->pLeft)
+        return *this;
+
+    while (pNode != nullptr && pAdd == pNode->pRight)
+    {
+        pAdd = pNode;
+        pNode = pNode->pParent;
     }
 
     return *this;
@@ -651,7 +653,6 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ ()
 template <typename T>
 typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
 {
-    // doesn't add to % apparently?
     if (pNode == nullptr)
         return *this;
 
@@ -664,15 +665,18 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
         return *this;
     }
 
-    BNode* pNew = pNode;
+    BNode* pSave = pNode;
     pNode = pNode->pParent;
 
-    if (pNew == pNode->pRight)
+    if (pNode == nullptr)
         return *this;
 
-    while (pNode != nullptr && pNew == pNode->pLeft)
+    if (pSave == pNode->pRight)
+        return *this;
+
+    while (pNode != nullptr && pSave == pNode->pLeft)
     {
-        pNew = pNode;
+        pSave = pNode;
         pNode = pNode->pParent;
     }
 
