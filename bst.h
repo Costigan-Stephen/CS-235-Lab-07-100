@@ -444,7 +444,15 @@ inline void BST<T>::removeNode(BNode* pNode)
 template <typename T>
 typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
 {
-   return root;
+    if (root == nullptr)
+        return nullptr;
+
+    BNode* leftdata = root;
+    while (leftdata->pLeft)
+        leftdata = leftdata->pLeft;
+
+    return iterator(leftdata);
+   /*return end();*/
 } 
  
 
