@@ -671,7 +671,7 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
     if (pNode == nullptr)
         return *this;
 
-    if (pAdd == pNode->pRight)  
+    if (pAdd == pNode->pRight)
         return *this;
 
     while (pNode != nullptr && pAdd == pNode->pLeft)
