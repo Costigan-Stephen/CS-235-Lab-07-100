@@ -375,15 +375,22 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
         }
         else if (p->data < t)
         {
-            p = p->pRight;
-    
-            /*if (p == nullptr)
+            if (p->pRight == nullptr && p->pLeft == nullptr)
             {
-                p->pParent->addLeft(t);
-            }  */           
+                //p->addRight(t); //this should work after add right functions are finished
+                pairReturn.first = iterator(p->pRight);
+                pairReturn.second = true;
+            }
+            p = p->pRight;             
         }
         else
         {
+            if (p->pRight == nullptr && p->pLeft == nullptr)
+            {
+                //p->addLeft(t); //this should work after add left functions are finished
+                pairReturn.first = iterator(p->pLeft);
+                pairReturn.second = true;
+            }
             p = p->pLeft;
         }
     }
