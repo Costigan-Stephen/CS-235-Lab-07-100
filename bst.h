@@ -112,7 +112,6 @@ private:
    size_t numElements;        // number of elements currently in the tree
 };
 
-
 /*****************************************************************
  * BINARY NODE
  * A single node in a binary tree. Note that the node does not know
@@ -216,7 +215,6 @@ private:
     BNode * pNode;
 };
 
-
 /*********************************************
  *********************************************
  *******************       *******************
@@ -250,7 +248,6 @@ BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
     }
     return *this;
 }
-
 
 /*********************************************
  * BST :: ASSIGN-MOVE OPERATOR
@@ -421,7 +418,6 @@ inline void BST<T>::removeNode(BNode* pNode)
     delete pNode;
 }
 
-
 /*****************************************************
  * BST :: BEGIN
  * Return the first node (left-most) in a binary search tree
@@ -438,7 +434,6 @@ typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
 
     return iterator(leftdata);
 } 
- 
 
 /****************************************************
  * BST :: FIND
@@ -467,7 +462,6 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
     }
 }
 
-
 /******************************************************
  ******************************************************
  **********************          **********************
@@ -476,7 +470,6 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
  ******************************************************
  ******************************************************/
 
- 
 /******************************************************
  * BINARY NODE :: ADD LEFT
  * Add a node to the left of the current node
@@ -551,8 +544,6 @@ void BST <T> ::BNode::addRight(T && t)
     if (t)
         this.pRight->data = new BNode(t);
 }
-
-
 
 /*************************************************
  *************************************************
