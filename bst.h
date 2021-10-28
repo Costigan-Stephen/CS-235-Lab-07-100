@@ -56,10 +56,19 @@ public:
    // Assign
    //
 
-   BST & operator = (const BST &  rhs);
+   BST & operator = (const BST &  rhs); 
    BST & operator = (      BST && rhs);
    BST & operator = (const std::initializer_list<T>& il);
    void swap(BST & rhs);
+
+   inline friend bool & operator < (const BST& lhs, const BST& rhs)
+   {
+       return !(lhs->data > rhs->data);
+   }
+   inline friend bool & operator > (const BST& lhs, const BST& rhs)
+   {  // the distance from the origin
+       return !(lhs->data < rhs->data);
+   }
 
    //
    // Iterator
@@ -136,7 +145,7 @@ public:
    void addRight(BNode * pNode);
    void addLeft (const T &  t);
    void addRight(const T &  t);
-   void addLeft(       T && t);
+   void addLeft (      T && t);
    void addRight(      T && t);
 
    void assign(BNode* pDest, const BNode* pSrc);
@@ -257,6 +266,7 @@ BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
     }
    return *this;
 }
+
 
 /*********************************************
  * BST :: ASSIGN-MOVE OPERATOR
@@ -428,7 +438,6 @@ inline void BST<T>::removeNode(BNode* pNode)
     }
     delete pNode;
 }
-
 
 
 /*****************************************************
