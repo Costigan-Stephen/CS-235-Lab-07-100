@@ -134,7 +134,7 @@ public:
    // 
    // Status
    //
-   bool isRightChild(BNode* pNode) const { return pNode->data > pNode->pParent->data; } // DON'T KNOW IF IT CHANGES ANYTHING
+   bool isRightChild(BNode* pNode) const { return pNode->pParent->data < pNode->data; } // DON'T KNOW IF IT CHANGES ANYTHING
    bool isLeftChild (BNode* pNode) const { return pNode->data < pNode->pParent->data; } // <-/
 
    //
@@ -274,6 +274,27 @@ void BST <T> :: swap (BST <T>& rhs)
 template <typename T>
 std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, bool keepUnique)
 {
+    BNode* p = root;
+    iterator it = iterator(p);
+    while (p != nullptr)
+    {
+        it++;
+        if (p->data < t)
+        {
+            p = p->pRight;
+
+            if(p == nullptr)
+            {
+                //addRight(t);
+            }
+            else{}
+            
+        }
+        else
+        {
+            p = p->pLeft;
+        }
+    }
    std::pair<iterator, bool> pairReturn(end(), false);
    return pairReturn;
 }
@@ -281,8 +302,93 @@ std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, boo
 template <typename T>
 std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepUnique)
 {
-   std::pair<iterator, bool> pairReturn(end(), false);
-   return pairReturn;
+   /* IF pParent.isRed() AND pGranny.isBlack() AND
+        pSibling.isBlack() AND pAunt.isBlack() AND
+        pParent.pRight = pNew AND pGranny.pRight = pParent
+            pParent.addLeft(pGranny)
+            pGranny.addRight(pSibling)
+            pHead <- pParent
+            pGranny.setRed()
+            pParent.setBlack()*/
+    //find sibling
+   // BNode* p = root;
+   //iterator it = iterator(p);
+   //BNode* sib;
+   //if (p->isLeftChild(p))
+   //{
+   //    sib = p->pParent->pRight;
+   //}
+   //else if(p->isRightChild(p))
+   //{
+   //    sib = p->pParent->pLeft;
+   //}
+   //else
+   //{
+   //    sib = nullptr;
+   //}
+   ////find aunt
+   //BNode* ant;
+   //if (p->pParent->isLeftChild(p))
+   //{
+   //    ant = p->pParent->pParent->pRight;
+   //}
+   //else if (p->pParent->isRightChild(p))
+   //{
+   //    ant = p->pParent->pParent->pLeft;
+   //}
+   //else
+   //{
+   //    ant = nullptr;
+   //}
+   //if(p==nullptr || )
+   ////do the insert
+   //if (p->pParent->isRed   && p->pParent->pParent->isRed == false  &&
+   //    sib->isRed == false && ant->isRed == false                  
+  
+   //    )
+   //{
+   //
+   //}
+   //else
+   //{ }
+    std::pair<iterator, bool> pairReturn(end(), false);
+    if (!root)
+    {
+        root = new BNode(std::move(t));
+        root->isRed = false;
+        numElements = 1;
+        pairReturn.first = iterator(root);
+        pairReturn.second = true;
+        return pairReturn;
+    }    
+    BNode* p = root;
+    iterator it = iterator(p);
+    
+    while (p != nullptr)
+    {
+        it++;
+        if (p->data == t)
+        {
+            pairReturn.first = iterator(p);
+            pairReturn.second = false;
+            return pairReturn;
+        }
+        else if (p->data < t)
+        {
+            p = p->pRight;
+    
+            /*if (p == nullptr)
+            {
+                p->pParent->addLeft(t);
+            }  */           
+        }
+        else
+        {
+            p = p->pLeft;
+        }
+    }
+   
+    return pairReturn;
 }
 
 /*************************************************
