@@ -1,0 +1,3 @@
+﻿  testBST.cpp
+D:\OneDrive - BYU-Idaho\BYUI\CS 235 Data Structures (CSE 232)\Week 7\100-3\bst.h(453): warning C4715: 'custom::BST<Spy>::find': not all control paths return a value
+  LabBST.vcxproj -> D:\OneDrive - BYU-Idaho\BYUI\CS 235 Data Structures (CSE 232)\Week 7\100-3\x64\Debug\LabBST.exe
