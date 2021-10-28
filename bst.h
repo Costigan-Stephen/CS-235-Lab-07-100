@@ -45,17 +45,15 @@ public:
    //
    // Construct - Finished | Alexander
    //
-
     BST() : root(nullptr), numElements(0) {}                                                                          //Default Constructor
     BST(const BST& rhs) : root(nullptr), numElements(0) { *this = rhs; }                                              //Copy constructor 
-    BST(BST&& rhs) : root(rhs.root), numElements(rhs.numElements) { rhs.root = nullptr; rhs.numElements = 0; }   //Move Constructor
-    BST(const std::initializer_list<T>& il) : root(nullptr), numElements(0) { *this = il; }                             //Initializer List Constructor
+    BST(BST&& rhs) : root(rhs.root), numElements(rhs.numElements) { rhs.root = nullptr; rhs.numElements = 0; }        //Move Constructor
+    BST(const std::initializer_list<T>& il) : root(nullptr), numElements(0) { *this = il; }                           //Initializer List Constructor
     ~BST() { clear(); }
 
    //
    // Assign
    //
-
    BST & operator = (const BST &  rhs); 
    BST & operator = (      BST && rhs);
    BST & operator = (const std::initializer_list<T>& il);
@@ -64,7 +62,6 @@ public:
    //
    // Iterator
    //
-
    class iterator;
    iterator   begin() const noexcept;
    iterator   end()   const noexcept { return iterator(nullptr); }
@@ -72,34 +69,27 @@ public:
    //
    // Access
    //
-
    iterator find(const T& t);
 
 
    // 
    // Insert
    //
-
    std::pair<iterator, bool> insert(const T&  t, bool keepUnique = false);
    std::pair<iterator, bool> insert(      T&& t, bool keepUnique = false);
 
    //
    // Remove
    // 
-
    iterator erase(iterator& it);
    void   clear() noexcept;
    
-   
-
    // 
    // Status
    //
-
    bool   empty() const noexcept { return numElements == 0; }
    size_t size()  const noexcept { return numElements;   }
    
-
 #ifdef DEBUG // make this visible to the unit tests
 public:
 #else
