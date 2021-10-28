@@ -61,17 +61,6 @@ public:
    BST & operator = (const std::initializer_list<T>& il);
    void swap(BST & rhs);
 
-   /*
-    inline friend bool & operator < (const BST& lhs, const BST& rhs)
-    {
-        return !(lhs->data > rhs->data);
-    }
-    inline friend bool & operator > (const BST& lhs, const BST& rhs)
-    {
-        return !(lhs->data < rhs->data);
-    }
-    */ 
-
    //
    // Iterator
    //
@@ -379,8 +368,6 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
         }
     }*/ 
     return end();
-
-   /*return end();*/
 }
 
 /*****************************************************
@@ -452,7 +439,6 @@ typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
         leftdata = leftdata->pLeft;
 
     return iterator(leftdata);
-   /*return end();*/
 } 
  
 
@@ -479,10 +465,8 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
         else
         {
             p = p->pLeft;
-        }
-        
+        }  
     }
-
 }
 
 
