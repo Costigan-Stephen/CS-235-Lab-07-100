@@ -61,14 +61,16 @@ public:
    BST & operator = (const std::initializer_list<T>& il);
    void swap(BST & rhs);
 
-   inline friend bool & operator < (const BST& lhs, const BST& rhs)
-   {
-       return !(lhs->data > rhs->data);
-   }
-   inline friend bool & operator > (const BST& lhs, const BST& rhs)
-   {
-       return !(lhs->data < rhs->data);
-   }
+   /*
+    inline friend bool & operator < (const BST& lhs, const BST& rhs)
+    {
+        return !(lhs->data > rhs->data);
+    }
+    inline friend bool & operator > (const BST& lhs, const BST& rhs)
+    {
+        return !(lhs->data < rhs->data);
+    }
+    */ 
 
    //
    // Iterator
