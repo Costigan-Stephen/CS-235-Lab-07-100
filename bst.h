@@ -651,7 +651,32 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ ()
 template <typename T>
 typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
 {
-   return *this;
+    // doesn't add to % apparently?
+    if (pNode == nullptr)
+        return *this;
+
+    if (pNode->pLeft != nullptr)
+    {
+        pNode = pNode->pLeft;
+
+        while (pNode->pRight)
+            pNode = pNode->pRight;
+        return *this;
+    }
+
+    BNode* pNew = pNode;
+    pNode = pNode->pParent;
+
+    if (pNew == pNode->pRight)
+        return *this;
+
+    while (pNode != nullptr && pNew == pNode->pLeft)
+    {
+        pNew = pNode;
+        pNode = pNode->pParent;
+    }
+
+    return *this;
 
 }
 
