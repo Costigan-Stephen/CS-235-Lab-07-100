@@ -261,7 +261,7 @@ BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
     for (T t : il) {
         insert(t); // WILL PROB INCREASE % WHEN INSERT IS DONE
     }
-   return *this;
+    return *this;
 }
 
 
@@ -463,42 +463,6 @@ typename BST <T> :: iterator custom :: BST <T> :: begin() const noexcept
 template <typename T>
 typename BST <T> :: iterator BST<T> :: find(const T & t)
 {
-    /*Iterator method
-     BST.find(value)
-     p <- root
-     WHILE p != NULL
-         IF p.data = value
-         RETURN iterator(p)
-         ELSEIF value < p.data
-         p <- p.pLeft
-         ELSE
-         p <- p.pRight
-     RETURN end()
-     */
-     //BNode* p = new BNode(t);
-     //BNode* p = root;
-     //p->data = t;
-     //BNode* r = root;
-     //while (r != nullptr)
-     //{
-     //    if (p->data == r->data)
-     //    {
-     //        return iterator(p);
-     //    }
-     //    else if (p->isRightChild(p))
-     //    {
-     //        r = r->pLeft;
-     //    }
-     //    else if (p->isLeftChild(p))
-     //    {
-     //        r = r->pRight;
-     //    }
-     //    else
-     //    {
-     //        return nullptr;
-     //    }
-     //
-     //}
     BNode* p = root;
     iterator it = iterator(p);
     while (p != nullptr)
@@ -507,7 +471,6 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
         if (p->data == t)
         {
             return iterator(p);
-            /*return nullptr;*/
         }
         else if (p->data < t)
         {
@@ -521,7 +484,6 @@ typename BST <T> :: iterator BST<T> :: find(const T & t)
     }
 
 }
-
 
 
 /******************************************************
@@ -553,7 +515,6 @@ void BST <T> :: BNode :: addLeft (BNode * pNode)
 template <typename T>
 void BST <T> :: BNode :: addRight (BNode * pNode)
 {
-    //pParent = pRight;
     // does not increase % 
     if (pNode)
         pParent = pNode->pParent;
@@ -633,7 +594,6 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ ()
     if (pNode->pRight != nullptr)
     {
         pNode = pNode->pRight;
-
         while (pNode->pLeft)
             pNode = pNode->pLeft;
         return *this;
@@ -670,7 +630,6 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
     if (pNode->pLeft != nullptr)
     {
         pNode = pNode->pLeft;
-
         while (pNode->pRight)
             pNode = pNode->pRight;
         return *this;
