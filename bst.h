@@ -274,29 +274,54 @@ void BST <T> :: swap (BST <T>& rhs)
 template <typename T>
 std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, bool keepUnique)
 {
-    BNode* p = root;
-    iterator it = iterator(p);
-    while (p != nullptr)
-    {
-        it++;
-        if (p->data < t)
-        {
-            p = p->pRight;
+   // BNode* p = root;
+   // iterator it = iterator(p);
+   // while (p != nullptr)
+   // {
+   //     it++;
+   //     if (p->data < t)
+   //     {
+   //         p = p->pRight;
 
-            if(p == nullptr)
-            {
-                //addRight(t);
-            }
-            else{}
-            
+   //         if(p == nullptr)
+   //         {
+   //             //addRight(t);
+   //         }
+   //         else{}
+   //         
+   //     }
+   //     else
+   //     {
+   //         p = p->pLeft;
+   //     }
+   // }
+   //std::pair<iterator, bool> pairReturn(end(), false);
+   //return pairReturn;
+    iterator it;
+
+    if (keepUnique)
+        it = find(t);
+
+    if (it == nullptr) {
+
+        if (t < root->data)
+        {
+            root->addLeft(t);
+            root->pLeft->pParent = root;
+            it = iterator(root->pLeft);
         }
         else
         {
-            p = p->pLeft;
+            root->addRight(t);
+            root->pRight->pParent = root;
+            it = iterator(root->pRight);
         }
+
+        numElements++;
+
     }
-   std::pair<iterator, bool> pairReturn(end(), false);
-   return pairReturn;
+    std::pair<iterator, bool> pairReturn(it, false);
+    return pairReturn;
 }
 
 template <typename T>
@@ -353,52 +378,77 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
    //{ }
 
    //This takes care of a new insert into nothing
-    std::pair<iterator, bool> pairReturn(end(), false);
-    if (!root)
-    {
-        root = new BNode(std::move(t));
-        root->isRed = false;
-        numElements = 1;
-        pairReturn.first = iterator(root);
-        pairReturn.second = true;
-        return pairReturn;
-    }    
-    BNode* p = root;
-    iterator it = iterator(p);
-    //This loop is used to get to the end
-    while (p != nullptr)
-    {
-        it++;
-        if (p->data == t)
+    //std::pair<iterator, bool> pairReturn(end(), false);
+    //if (!root)
+    //{
+    //    root = new BNode(std::move(t));
+    //    root->isRed = false;
+    //    numElements = 1;
+    //    pairReturn.first = iterator(root);
+    //    pairReturn.second = true;
+    //    return pairReturn;
+    //}    
+    //BNode* p = root;
+    //iterator it = iterator(p);
+    ////This loop is used to get to the end
+    //while (p != nullptr)
+    //{
+    //    it++;
+    //    if (p->data == t)
+    //    {
+    //        pairReturn.first = iterator(p);
+    //        pairReturn.second = false;
+    //        return pairReturn;
+    //    }
+    //    else if (p->data < t)
+    //    {
+    //        if (p->pRight == nullptr && p->pLeft == nullptr)
+    //        {
+    //            //p->addRight(t); //this should work after add right functions are finished
+    //            pairReturn.first = iterator(p->pRight);
+    //            pairReturn.second = true;
+    //            return pairReturn;
+    //        }
+    //        p = p->pRight;             
+    //    }
+    //    else
+    //    {
+    //        if (p->pRight == nullptr && p->pLeft == nullptr)
+    //        {
+    //            //p->addLeft(t); //this should work after add left functions are finished
+    //            pairReturn.first = iterator(p->pLeft);
+    //            pairReturn.second = true;
+    //            return pairReturn;
+    //        }
+    //        p = p->pLeft;
+    //    }
+    //}
+   
+    //return pairReturn;
+    iterator it;
+
+    if (keepUnique)
+        it = find(t);
+
+    if (it == nullptr) {
+
+        if (t < root->data)
         {
-            pairReturn.first = iterator(p);
-            pairReturn.second = false;
-            return pairReturn;
-        }
-        else if (p->data < t)
-        {
-            if (p->pRight == nullptr && p->pLeft == nullptr)
-            {
-                //p->addRight(t); //this should work after add right functions are finished
-                pairReturn.first = iterator(p->pRight);
-                pairReturn.second = true;
-                return pairReturn;
-            }
-            p = p->pRight;             
+            root->addLeft(t);
+            root->pLeft->pParent = root;
+            it = iterator(root->pLeft);
         }
         else
         {
-            if (p->pRight == nullptr && p->pLeft == nullptr)
-            {
-                //p->addLeft(t); //this should work after add left functions are finished
-                pairReturn.first = iterator(p->pLeft);
-                pairReturn.second = true;
-                return pairReturn;
-            }
-            p = p->pLeft;
+            root->addRight(t);
+            root->pRight->pParent = root;
+            it = iterator(root->pRight);
         }
+
+        numElements++;
+
     }
-   
+    std::pair<iterator, bool> pairReturn(it, false);
     return pairReturn;
 }
 
@@ -611,8 +661,7 @@ template <typename T>
 void BST<T> :: BNode :: addLeft (const T & t)
 {
     // does not increase %
-    if (t)
-        pLeft = new BNode(t);
+    pLeft = new BNode(t);
    
 }
 
@@ -624,8 +673,7 @@ template <typename T>
 void BST<T> ::BNode::addLeft(T && t)
 {
     // does not increase %
-    if (t)
-        pLeft = new BNode(t);
+    pLeft = new BNode(t);
 }
 
 /******************************************************
@@ -636,8 +684,7 @@ template <typename T>
 void BST <T> :: BNode :: addRight (const T & t)
 {
     // does not increase %
-    if (t)
-        pRight = new BNode(t);
+    pRight = new BNode(t);
 }
 
 /******************************************************
@@ -648,8 +695,7 @@ template <typename T>
 void BST <T> ::BNode::addRight(T && t)
 {
     // does not increase %
-    if (t)
-        pRight = new BNode(t);
+    pRight = new BNode(t);
 }
 
 /*************************************************
