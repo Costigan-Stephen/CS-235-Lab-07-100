@@ -82,7 +82,7 @@ public:
    // 
    iterator erase(iterator& it);
    void   clear() noexcept;
-   
+
    // 
    // Status
    //
@@ -98,7 +98,9 @@ private:
    class BNode;
    BNode * root;              // root node of the binary search tree
    void removeNode(BNode* pNode);
+   
    void clear(BNode*& pThis);
+   void assign(BNode*& pDest, const BNode* pSrc);
    size_t numElements;        // number of elements currently in the tree
 };
 
@@ -114,9 +116,9 @@ public:
    // 
    // Construct
    //
-    BNode() : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(T()) {}				// Default Constructor
-    BNode(const T& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(t) {}		// Copy Constructor
-    BNode(T&& t) : pLeft(nullptr), pRight(nullptr), data(std::move(t)) {}					// Move Constructor
+    BNode() : pLeft(nullptr), pRight(nullptr), pParent(nullptr), data(T()) { isRed = true; }				// Default Constructor
+    BNode(const T& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(t) { isRed = true; }		// Copy Constructor
+    BNode(T&& t) : pParent(nullptr), pLeft(nullptr), pRight(nullptr), data(std::move(t)) { isRed = true; }	// Move Constructor
 
    //
    // Insert
@@ -128,8 +130,9 @@ public:
    void addLeft (      T && t);
    void addRight(      T && t);
 
-   void assign(BNode* pDest, const BNode* pSrc);
+   //void assign(BNode* pDest, const BNode* pSrc);
    void clear(BNode* pThis);
+   
 
    // 
    // Status
@@ -160,8 +163,7 @@ public:
    iterator(const iterator& rhs) { pNode = rhs.pNode; }
    iterator & operator = (const iterator & rhs)
    {
-        if (&rhs != nullptr)
-            pNode = rhs.pNode;
+        pNode = rhs.pNode;
         return *this;
    }
 
@@ -220,7 +222,15 @@ private:
 template <typename T>
 BST <T> & BST <T> :: operator = (const BST <T> & rhs)
 {
-    root->assign(root, rhs.root);
+    /*
+        TestBST::test_constructCopy_one()
+                line:185 condition:bstDest.root != nullptr
+        TestBST::test_constructCopy_standard()
+                line:240 condition:bst.root != nullptr
+                line:240 condition:bst.root != nullptr
+    */
+    clear();
+    assign(root, rhs.root);
     numElements = rhs.numElements;
     return *this;
 }
@@ -268,6 +278,41 @@ void BST <T> :: swap (BST <T>& rhs)
     numElements = tempElements;
 }
 
+template <typename T>
+void BST <T> ::assign(BNode*& pDest, const BNode* pSrc)
+{
+    // Source is Empty
+    if (!pSrc) {
+        clear(pDest);
+        return;
+    }
+
+    // Copy root values, but only at root level
+    if (!pDest->pParent) {
+        
+    }
+
+    // Neither the Source nor Destination are Empty
+    if (pDest && pSrc) {
+        pDest->data = pSrc->data;
+        assign(pDest->pRight, pSrc->pRight);
+        assign(pDest->pLeft, pSrc->pLeft);
+    }
+
+    // Destination is Empty
+    if (!pDest && pSrc) {
+        pDest = new BST::BNode(pSrc->data);
+        assign(pDest->pRight, pSrc->pRight);
+        assign(pDest->pLeft, pSrc->pLeft);
+    }
+
+    // Setting parent values
+    if (pDest->pRight)
+        pDest->pRight->pParent = pDest;
+    if (pDest->pLeft)
+        pDest->pLeft->pParent = pDest;
+}
+
 /*****************************************************
  * BST :: INSERT
  * Insert a node at a given location in the tree
@@ -309,23 +354,24 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
 
     if (keepUnique)
         it = find(t);
-
-    if (it == nullptr) {
-
+    if (it == nullptr)
+    {
         if (t < root->data)
         {
-            root->addLeft(t);
-            root->pLeft->pParent = root;
+            root->addLeft(std::move(t));
+            root->pLeft->pParent = std::move(root);
             it = iterator(root->pLeft);
         }
         else
         {
-            root->addRight(t);
-            root->pRight->pParent = root;
+            root->addRight(std::move(t));
+            root->pRight->pParent = std::move(root);
             it = iterator(root->pRight);
         }
+
         numElements++;
     }
+
     std::pair<iterator, bool> pairReturn(it, false);
     return pairReturn;
 }
@@ -349,8 +395,21 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
     if (it.pNode == nullptr)
         return it;
 
+    // No Children
+    if (it.pNode->pLeft == nullptr && it.pNode->pRight == nullptr) {
+        if (it.pNode->pParent != nullptr) {
+            if (it.pNode->pParent->pRight == it.pNode) {
+                it.pNode->pParent->pRight = nullptr;
+            }
+            if (it.pNode->pParent->pLeft == it.pNode) {
+                it.pNode->pParent->pLeft = nullptr;
+            }
+        }
+        delete it.pNode;
+    }
+
     // One Child Right
-    if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) {
+     else if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) {
         if (it.pNode->pParent != nullptr) {
             if (it.pNode->pParent->pRight == it.pNode) {
                 it.pNode->pParent->pRight = nullptr;
@@ -358,11 +417,11 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             if (it.pNode->pLeft == it.pNode) {
                 it.pNode->pParent->pLeft = nullptr;
             }
-            delete it.pNode;
         }
+        delete it.pNode;
     }
     // One Child Left
-    if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr) {
+    else if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr) {
         if (it.pNode->pParent != nullptr) {
             if (it.pNode->pParent->pRight == it.pNode) {
                 it.pNode->pParent->pRight = nullptr;
@@ -370,11 +429,11 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             if (it.pNode->pLeft == it.pNode) {
                 it.pNode->pParent->pLeft = nullptr;
             }
-            delete it.pNode;
         }
+        delete it.pNode;
     }
     // two Children
-    /*if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr) {
+    else if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr) {
         if (it.pNode->pParent != nullptr) {
             if (it.pNode->pParent->pRight == it.pNode) {
                 it.pNode->pParent->pRight = it.pNode->pParent;
@@ -384,8 +443,8 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             }
             delete it.pNode;
         }
-    }*/
-
+    }
+    numElements--;
     return it;
 }
 
@@ -397,10 +456,11 @@ template <typename T>
 void BST <T> ::clear() noexcept
 {
 
-   clear(root);
+    clear(root);
     root = nullptr;
     numElements = 0;
 }
+
 
 /*****************************************************
     * BST :: CLEAR (RECURSIVE)
@@ -599,7 +659,6 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator ++ ()
         pAdd = pNode;
         pNode = pNode->pParent;
     }
-
     return *this;
 }
 
@@ -635,46 +694,48 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
         pAdd = pNode;
         pNode = pNode->pParent;
     }
-
     return *this;
-
 }
 
-/**********************************************
- * assign
- * copy the values from pSrc onto pDest preserving
- * as many of the nodes as possible.
- *********************************************/
-template <typename T>
-void BST<T> ::BNode::assign(BST<T> ::BNode* pDest, const BST<T> ::BNode* pSrc)
-{
-
-    // Source is Empty
-    if (!pSrc) {
-        clear(pDest);
-        return;
-    }
-
-    // Neither the Source nor Destination are Empty
-    if (pDest && pSrc) {
-        pDest->data = pSrc->data;
-        assign(pDest->pRight, pSrc->pRight);
-        assign(pDest->pLeft, pSrc->pLeft);
-    }
-
-    // Destination is Empty
-    if (!pDest && pSrc) {
-        pDest = new BST::BNode(pSrc->data);
-        assign(pDest->pRight, pSrc->pRight);
-        assign(pDest->pLeft, pSrc->pLeft);
-    }
-
-    // Setting parent values
-    if (pDest->pRight)
-        pDest->pRight->pParent = pDest;
-    if (pDest->pLeft)
-        pDest->pLeft->pParent = pDest;
-}
+///**********************************************
+// * assign
+// * copy the values from pSrc onto pDest preserving
+// * as many of the nodes as possible.
+// *********************************************/
+//template <typename T>
+//void BST<T> ::BNode::assign(BST<T> ::BNode* pDest, const BST<T> ::BNode* pSrc)
+//{
+//    // Source is Empty
+//    if (!pSrc) {
+//        clear(pDest);
+//        return;
+//    }
+//
+//    // Copy root values, but only at root level
+//    if (!pDest->pParent) {
+//        
+//    }
+//
+//    // Neither the Source nor Destination are Empty
+//    if (pDest && pSrc) {
+//        pDest->data = pSrc->data;
+//        assign(pDest->pRight, pSrc->pRight);
+//        assign(pDest->pLeft, pSrc->pLeft);
+//    }
+//
+//    // Destination is Empty
+//    if (!pDest && pSrc) {
+//        pDest = new BST::BNode(pSrc->data);
+//        assign(pDest->pRight, pSrc->pRight);
+//        assign(pDest->pLeft, pSrc->pLeft);
+//    }
+//
+//    // Setting parent values
+//    if (pDest->pRight)
+//        pDest->pRight->pParent = pDest;
+//    if (pDest->pLeft)
+//        pDest->pLeft->pParent = pDest;
+//}
 
 /*****************************************************
  * DELETE BINARY TREE
@@ -692,6 +753,7 @@ void BST<T>::BNode::clear(BNode* pThis)
         clear(pThis->pRight);
     pThis = nullptr;
 }
+
 
 } // namespace custom
 
