@@ -401,7 +401,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
                 }
                 returnIt = it.pNode->pParent;
             }
-            delete it.pNode;
+            
         }
         //one child | Complete        
         else if (returnIt.pNode->pRight == nullptr && returnIt.pNode->pLeft) {
@@ -443,7 +443,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
                 line:2331 condition:p10->pParent == p30
                 line:2332 condition:p50->pParent == p30
                 line:2333 condition:p40->pParent == p50
-        */
+        */ 
         else if (it.pNode->pLeft && it.pNode->pRight != nullptr) {
             if (it.pNode->pParent) {
                 if (it.pNode->pParent->pRight == it.pNode) {
@@ -454,8 +454,8 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
                 }
                 returnIt = it.pNode->pParent;
             }
-             it.pNode;
         }
+        delete it.pNode;
         numElements--;
     }
  
