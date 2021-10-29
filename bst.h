@@ -14,7 +14,7 @@
  *        BST                 : A class that represents a binary search tree
  *        BST::iterator       : An iterator through BST
  * Author
- *    Stephen Costigan, Alexander Dohms, Jonathan Colwell
+ *    Stephen Costigan, Alexander Dohms, Jonathan Colwell, Shaun Crook
  ************************************************************************/
 
 #pragma once
@@ -26,6 +26,7 @@
 #endif // !DEBUG
 
 #include <cassert>
+#include <iostream>
 #include <utility>
 #include <memory>     // for std::allocator
 #include <functional> // for std::less
@@ -88,6 +89,8 @@ public:
    //
    bool   empty() const noexcept { return numElements == 0; }
    size_t size()  const noexcept { return numElements;   }
+
+   
    
 #ifdef DEBUG // make this visible to the unit tests
 public:
@@ -98,6 +101,12 @@ private:
    class BNode;
    BNode * root;              // root node of the binary search tree
    void removeNode(BNode* pNode);
+
+   friend std::ostream& operator << (std::ostream& out, BNode & rhs)
+   {
+       out << **rhs->data;
+       return out;
+   };
    
    void clear(BNode*& pThis);
    void assign(BNode*& pDest, const BNode* pSrc);
@@ -375,70 +384,74 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
 template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {  
-    if (it.pNode == nullptr)
-        return it;
-
     iterator returnIt = it;
 
-    // No Children
-    if (it.pNode->pLeft == nullptr && it.pNode->pRight == nullptr) {
-        if (it.pNode->pParent) {
-            if (it.pNode->pParent->pRight == it.pNode) {
-                it.pNode->pParent->pRight = nullptr;
-            }
-            if (it.pNode->pParent->pLeft == it.pNode) {
-                it.pNode->pParent->pLeft = nullptr;
-            }
-            returnIt = it.pNode->pParent;
-        }
-        delete it.pNode;
-    }
+    if (it.pNode != nullptr) {
 
-    // One Child Right
-    else if (it.pNode->pRight == nullptr && it.pNode->pLeft) {
-        if (it.pNode->pParent != nullptr) {
-            if (it.pNode->pParent->pRight == it.pNode) {
-                it.pNode->pParent->pRight = nullptr;
+        // No Children
+        if (it.pNode->pLeft == nullptr && it.pNode->pRight == nullptr) {
+            if (it.pNode->pParent) {
+                if (it.pNode->pParent->pRight == it.pNode) {
+                    returnIt.pNode->pParent->pRight = nullptr;
+                }
+                if (it.pNode->pParent->pLeft == it.pNode) {
+                    returnIt.pNode->pParent->pLeft = nullptr;
+                }
+                returnIt = it.pNode->pParent;
             }
-            if (it.pNode->pLeft == it.pNode) {
-                it.pNode->pParent->pLeft = nullptr;
-            }
-            returnIt = it.pNode->pParent;
+            delete it.pNode;
         }
-        delete it.pNode;
-    }
 
-    // One Child Left
-    else if (it.pNode->pLeft == nullptr && it.pNode->pRight) {
-        if (it.pNode->pParent) {
-            if (it.pNode->pParent->pRight == it.pNode) {
-                it.pNode->pParent->pRight = nullptr;
+        // One Child Right
+        else if (it.pNode->pRight == nullptr && it.pNode->pLeft) {
+            if (it.pNode->pParent != nullptr) {
+                if (it.pNode->pParent->pRight == it.pNode) {
+                    returnIt.pNode->pParent->pRight = it.pNode->pRight;
+                }
+                if (it.pNode->pParent->pLeft == it.pNode) {
+                    returnIt.pNode->pParent->pLeft = it.pNode->pLeft;;
+                }
             }
-            if (it.pNode->pLeft == it.pNode) {
-                it.pNode->pParent->pLeft = nullptr;
-            }
-            returnIt = it.pNode->pParent;
+            //delete it.pNode;
         }
-        delete it.pNode;
-    }
 
-    // two Children
-    else if (it.pNode->pLeft && it.pNode->pRight != nullptr) {
-        if (it.pNode->pParent) {
-            if (it.pNode->pParent->pRight == it.pNode) {
-                it.pNode->pParent->pRight = it.pNode->pParent;
+        // One Child Left
+        else if (it.pNode->pLeft == nullptr && it.pNode->pRight) {
+            if (it.pNode->pParent) {
+                std::cout << "IT.PNODE->PPARENT TRUE" << std::endl;
+                if (it.pNode->pParent->pRight == it.pNode) {
+                    std::cout << "IT.PNODE->PPARENT->PRIGHT TRUE" << std::endl;
+                    returnIt.pNode->pParent->pRight = it.pNode->pRight;
+                }
+                if (it.pNode->pParent->pLeft == it.pNode) {
+                    std::cout << "IT.PNODE->PPARENT->PLEFT TRUE" << std::endl;
+                    returnIt.pNode->pParent->pLeft = it.pNode->pLeft;
+                }
+                std::cout << "RETURNIT VALUE:: ";
+                std::cout << returnIt.pNode;
             }
-            if (it.pNode->pLeft == it.pNode) {
-                it.pNode->pParent->pLeft = it.pNode->pParent;
-            }
-            returnIt = it.pNode->pParent;
+            //delete it.pNode;
         }
-        delete it.pNode;
-    }
 
-    numElements--;
+        // two Children
+        else if (it.pNode->pLeft && it.pNode->pRight != nullptr) {
+            if (it.pNode->pParent) {
+                if (it.pNode->pParent->pRight == it.pNode) {
+                    returnIt.pNode->pParent->pRight = it.pNode->pParent;
+                }
+                if (it.pNode->pLeft == it.pNode) {
+                    returnIt.pNode->pParent->pLeft = it.pNode->pParent;
+                }
+                returnIt = it.pNode->pParent;
+            }
+            //delete it.pNode;
+        }
+        numElements--;
+    }
+ 
     return returnIt;
 }
+
 
 /*****************************************************
  * BST :: CLEAR
