@@ -388,7 +388,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 
     if (it.pNode != nullptr) {
 
-        // No Children
+        // No Children | COMPLETE
         if (it.pNode->pLeft == nullptr && it.pNode->pRight == nullptr) {
             if (it.pNode->pParent) {
                 if (it.pNode->pParent->pRight == it.pNode) {
@@ -402,7 +402,8 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             delete it.pNode;
         }
 
-        // One Child Right
+        // One Child Right | 3 ERRORS TOTAL, 3 UNIQUE (SEE LEFT)
+        
         else if (it.pNode->pRight == nullptr && it.pNode->pLeft) {
             if (it.pNode->pParent != nullptr) {
                 if (it.pNode->pParent->pRight == it.pNode) {
@@ -415,7 +416,13 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             delete it.pNode;
         }
 
-        // One Child Left
+        // One Child Left | 3 ERRORS TOTAL, 3 UNIQUE
+        /*
+        *  TestBST::test_erase_oneChild()
+                line:2254 condition:itReturn == custom::BST <int> ::iterator(p20)
+                line:2257 condition:p50->pLeft == p30
+                line:2261 condition:p30->pParent == p50
+        */
         else if (it.pNode->pLeft == nullptr && it.pNode->pRight) {
             if (it.pNode->pParent) {
                 if (it.pNode->pParent->pRight == it.pNode) {
@@ -428,7 +435,18 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             delete it.pNode;
         }
 
-        // two Children
+        // two Children | 8 ERRORS TOTAL, 3 UNIQUE
+        /*
+        * TestBST::test_erase_twoChildren()
+                line:2320 condition:itReturn == custom::BST <int> ::iterator(p30)
+                line:2323 condition:p70->pLeft == p30
+                line:2325 condition:p30->pLeft == p10
+                line:2327 condition:p50->pLeft == p40
+                line:2329 condition:p30->pParent == p70
+                line:2331 condition:p10->pParent == p30
+                line:2332 condition:p50->pParent == p30
+                line:2333 condition:p40->pParent == p50
+        */
         else if (it.pNode->pLeft && it.pNode->pRight != nullptr) {
             if (it.pNode->pParent) {
                 if (it.pNode->pParent->pRight == it.pNode) {
