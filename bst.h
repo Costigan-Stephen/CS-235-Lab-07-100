@@ -412,7 +412,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
                     returnIt.pNode->pParent->pLeft = it.pNode->pLeft;;
                 }
             }
-            //delete it.pNode;
+            delete it.pNode;
         }
 
         // One Child Left
@@ -425,7 +425,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
                     returnIt.pNode->pParent->pLeft = it.pNode->pLeft;
                 }
             }
-            //delete it.pNode;
+            delete it.pNode;
         }
 
         // two Children
