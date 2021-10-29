@@ -101,12 +101,6 @@ private:
    class BNode;
    BNode * root;              // root node of the binary search tree
    void removeNode(BNode* pNode);
-
-   friend std::ostream& operator << (std::ostream& out, BNode & rhs)
-   {
-       out << **rhs->data;
-       return out;
-   };
    
    void clear(BNode*& pThis);
    void assign(BNode*& pDest, const BNode* pSrc);
