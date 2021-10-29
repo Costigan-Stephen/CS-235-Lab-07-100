@@ -385,6 +385,7 @@ template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {  
     iterator returnIt = it;
+    
     if (it == end())
         return end();
 
@@ -432,29 +433,38 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             
         }
 
-        // two Children | 8 ERRORS TOTAL, 3 UNIQUE
-        /*
-        * TestBST::test_erase_twoChildren()
-                line:2320 condition:itReturn == custom::BST <int> ::iterator(p30)
-                line:2323 condition:p70->pLeft == p30
-                line:2325 condition:p30->pLeft == p10
-                line:2327 condition:p50->pLeft == p40
-                line:2329 condition:p30->pParent == p70
-                line:2331 condition:p10->pParent == p30
-                line:2332 condition:p50->pParent == p30
-                line:2333 condition:p40->pParent == p50
-        */
-        else if (it.pNode->pLeft && it.pNode->pRight != nullptr) {
-            if (it.pNode->pParent) {
-                if (it.pNode->pParent->pRight == it.pNode) {
-                    returnIt.pNode->pParent->pRight = it.pNode->pParent;
-                }
-                if (it.pNode->pLeft == it.pNode) {
-                    returnIt.pNode->pParent->pLeft = it.pNode->pParent;
-                }
-                returnIt = it.pNode->pParent;
+        else
+        {
+            BNode* pIOS = it.pNode->pRight;
+            while (pIOS->pLeft != nullptr)
+                pIOS = pIOS->pLeft;
+
+            assert(pIOS->pLeft == nullptr);
+            pIOS->pLeft = it.pNode->pLeft;
+            if (it.pNode->pLeft)
+                it.pNode->pLeft->pParent = pIOS;
+
+            if (it.pNode->pRight != pIOS)
+            {
+                if (pIOS->pRight)
+                    pIOS->pRight->pParent = pIOS->pParent;
+                pIOS->pParent->pLeft = pIOS->pRight;
+
+                assert(it.pNode->pRight != nullptr);
+                pIOS->pRight = it.pNode->pRight;
+                it.pNode->pRight->pParent = pIOS;
             }
-             it.pNode;
+
+            pIOS->pParent = it.pNode->pParent;
+            if (it.pNode->pParent && it.pNode->pParent->pLeft == it.pNode)
+                it.pNode->pParent->pLeft = pIOS;
+            if (it.pNode->pParent && it.pNode->pParent->pRight == it.pNode)
+                it.pNode->pParent->pRight = pIOS;
+
+            if (root == it.pNode)
+                root = pIOS;
+
+            returnIt = iterator(pIOS);
         }
         numElements--;
     }
