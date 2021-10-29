@@ -274,29 +274,6 @@ void BST <T> :: swap (BST <T>& rhs)
 template <typename T>
 std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, bool keepUnique)
 {
-   // BNode* p = root;
-   // iterator it = iterator(p);
-   // while (p != nullptr)
-   // {
-   //     it++;
-   //     if (p->data < t)
-   //     {
-   //         p = p->pRight;
-
-   //         if(p == nullptr)
-   //         {
-   //             //addRight(t);
-   //         }
-   //         else{}
-   //         
-   //     }
-   //     else
-   //     {
-   //         p = p->pLeft;
-   //     }
-   // }
-   //std::pair<iterator, bool> pairReturn(end(), false);
-   //return pairReturn;
     iterator it;
 
     if (keepUnique)
@@ -327,104 +304,6 @@ std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, boo
 template <typename T>
 std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepUnique)
 {
-   /* IF pParent.isRed() AND pGranny.isBlack() AND
-        pSibling.isBlack() AND pAunt.isBlack() AND
-        pParent.pRight = pNew AND pGranny.pRight = pParent
-            pParent.addLeft(pGranny)
-            pGranny.addRight(pSibling)
-            pHead <- pParent
-            pGranny.setRed()
-            pParent.setBlack()*/
-    //find sibling
-   // BNode* p = root;
-   //iterator it = iterator(p);
-   //BNode* sib;
-   //if (p->isLeftChild(p))
-   //{
-   //    sib = p->pParent->pRight;
-   //}
-   //else if(p->isRightChild(p))
-   //{
-   //    sib = p->pParent->pLeft;
-   //}
-   //else
-   //{
-   //    sib = nullptr;
-   //}
-   ////find aunt
-   //BNode* ant;
-   //if (p->pParent->isLeftChild(p))
-   //{
-   //    ant = p->pParent->pParent->pRight;
-   //}
-   //else if (p->pParent->isRightChild(p))
-   //{
-   //    ant = p->pParent->pParent->pLeft;
-   //}
-   //else
-   //{
-   //    ant = nullptr;
-   //}
-   //if(p==nullptr || )
-   ////do the insert
-   //if (p->pParent->isRed   && p->pParent->pParent->isRed == false  &&
-   //    sib->isRed == false && ant->isRed == false                  
-  
-   //    )
-   //{
-   //
-   //}
-   //else
-   //{ }
-
-   //This takes care of a new insert into nothing
-    //std::pair<iterator, bool> pairReturn(end(), false);
-    //if (!root)
-    //{
-    //    root = new BNode(std::move(t));
-    //    root->isRed = false;
-    //    numElements = 1;
-    //    pairReturn.first = iterator(root);
-    //    pairReturn.second = true;
-    //    return pairReturn;
-    //}    
-    //BNode* p = root;
-    //iterator it = iterator(p);
-    ////This loop is used to get to the end
-    //while (p != nullptr)
-    //{
-    //    it++;
-    //    if (p->data == t)
-    //    {
-    //        pairReturn.first = iterator(p);
-    //        pairReturn.second = false;
-    //        return pairReturn;
-    //    }
-    //    else if (p->data < t)
-    //    {
-    //        if (p->pRight == nullptr && p->pLeft == nullptr)
-    //        {
-    //            //p->addRight(t); //this should work after add right functions are finished
-    //            pairReturn.first = iterator(p->pRight);
-    //            pairReturn.second = true;
-    //            return pairReturn;
-    //        }
-    //        p = p->pRight;             
-    //    }
-    //    else
-    //    {
-    //        if (p->pRight == nullptr && p->pLeft == nullptr)
-    //        {
-    //            //p->addLeft(t); //this should work after add left functions are finished
-    //            pairReturn.first = iterator(p->pLeft);
-    //            pairReturn.second = true;
-    //            return pairReturn;
-    //        }
-    //        p = p->pLeft;
-    //    }
-    //}
-   
-    //return pairReturn;
     iterator it;
 
     if (keepUnique)
@@ -459,66 +338,7 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
 template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {  
-    /*// node is empty
-    if (it.pNode == nullptr)
-    {
-        removeNode(it.pNode);
-        return end();
-    }
-
-    // node has no children
-    if (it.pNode->pRight == nullptr && it.pNode->pLeft == nullptr)
-    {
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-            it.pNode->pParent->pRight = nullptr;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-            it.pNode->pParent->pLeft = nullptr;
-        removeNode(it.pNode);
-        return end();
-    }
-    //one child
-    if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) // right exists, left does not
-    {
-        it.pNode->pLeft->pParent = it.pNode->pParent;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-            it.pNode->pParent->pRight = it.pNode->pLeft;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-            it.pNode->pParent->pLeft = it.pNode->pLeft;
-        removeNode(it.pNode);
-        return end();
-    }
-    if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr) // left exists, right does not
-    {
-        it.pNode->pRight->pParent = it.pNode->pParent;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-            it.pNode->pParent->pRight = it.pNode->pRight;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-            it.pNode->pParent->pLeft = it.pNode->pRight;
-        removeNode(it.pNode);
-        return end();
-    }
-    else if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr) // node has two children
-    {
-        BNode* newNode = it.pNode;
-        if (newNode->pRight != nullptr)
-        {
-            newNode = newNode->pRight;
-            while (newNode->pLeft != nullptr)
-            {
-                newNode = newNode->pLeft;
-            }
-            it.pNode->data = newNode->data;
-            newNode->pParent->pLeft = nullptr;
-            if (newNode->pRight != nullptr)
-            {
-                newNode->pRight->pParent = newNode->pParent;
-                newNode->pParent->pLeft = newNode->pRight;
-                newNode->pRight = nullptr;
-            }
-            delete newNode;
-            newNode = nullptr;
-        }
-    }*/ 
+    
     return end();
 }
 
