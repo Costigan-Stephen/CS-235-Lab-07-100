@@ -383,21 +383,23 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
     if (it.pNode == nullptr)
         return it;
 
+    iterator returnIt = it;
     // No Children
     if (it.pNode->pLeft == nullptr && it.pNode->pRight == nullptr) {
-        if (it.pNode->pParent != nullptr) {
+        if (it.pNode->pParent) {
             if (it.pNode->pParent->pRight == it.pNode) {
                 it.pNode->pParent->pRight = nullptr;
             }
             if (it.pNode->pParent->pLeft == it.pNode) {
                 it.pNode->pParent->pLeft = nullptr;
             }
+            returnIt = it.pNode->pParent;
         }
         delete it.pNode;
     }
 
     // One Child Right
-    else if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) {
+    else if (it.pNode->pRight == nullptr && it.pNode->pLeft) {
         if (it.pNode->pParent != nullptr) {
             if (it.pNode->pParent->pRight == it.pNode) {
                 it.pNode->pParent->pRight = nullptr;
@@ -409,8 +411,8 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
         delete it.pNode;
     }
     // One Child Left
-    else if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr) {
-        if (it.pNode->pParent != nullptr) {
+    else if (it.pNode->pLeft == nullptr && it.pNode->pRight) {
+        if (it.pNode->pParent) {
             if (it.pNode->pParent->pRight == it.pNode) {
                 it.pNode->pParent->pRight = nullptr;
             }
@@ -421,8 +423,8 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
         delete it.pNode;
     }
     // two Children
-    else if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr) {
-        if (it.pNode->pParent != nullptr) {
+    else if (it.pNode->pLeft && it.pNode->pRight != nullptr) {
+        if (it.pNode->pParent) {
             if (it.pNode->pParent->pRight == it.pNode) {
                 it.pNode->pParent->pRight = it.pNode->pParent;
             }
@@ -433,7 +435,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
         }
     }
     numElements--;
-    return it;
+    return returnIt;
 }
 
 /*****************************************************
