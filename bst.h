@@ -384,6 +384,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
         return it;
 
     iterator returnIt = it;
+
     // No Children
     if (it.pNode->pLeft == nullptr && it.pNode->pRight == nullptr) {
         if (it.pNode->pParent) {
@@ -407,9 +408,11 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             if (it.pNode->pLeft == it.pNode) {
                 it.pNode->pParent->pLeft = nullptr;
             }
+            returnIt = it.pNode->pParent;
         }
         delete it.pNode;
     }
+
     // One Child Left
     else if (it.pNode->pLeft == nullptr && it.pNode->pRight) {
         if (it.pNode->pParent) {
@@ -419,9 +422,11 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             if (it.pNode->pLeft == it.pNode) {
                 it.pNode->pParent->pLeft = nullptr;
             }
+            returnIt = it.pNode->pParent;
         }
         delete it.pNode;
     }
+
     // two Children
     else if (it.pNode->pLeft && it.pNode->pRight != nullptr) {
         if (it.pNode->pParent) {
@@ -431,9 +436,11 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             if (it.pNode->pLeft == it.pNode) {
                 it.pNode->pParent->pLeft = it.pNode->pParent;
             }
-            delete it.pNode;
+            returnIt = it.pNode->pParent;
         }
+        delete it.pNode;
     }
+
     numElements--;
     return returnIt;
 }
