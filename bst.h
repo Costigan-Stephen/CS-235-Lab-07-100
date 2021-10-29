@@ -246,6 +246,7 @@ BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
 template <typename T>
 BST <T> & BST <T> :: operator = (BST <T> && rhs)
 {
+    // This still isn't right, but I think it's because we don't have clear
     clear();
     swap(rhs);
     return *this;
@@ -349,16 +350,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
-   
-   //Example from pList
-   // loop is unnecessary for the checks, but probably good practice
-//   while (pParent != NULL)
-//   {
-//      BNode* pDelete = pParent;
-//       pParent = pHead->pNext;
-//       delete pDelete;
-//   }
-//   pTail = nullptr;
+   // still need to remove all leaves from the tree
  
    root = nullptr;
    numElements = 0;
