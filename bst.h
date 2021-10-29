@@ -234,7 +234,7 @@ BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
 {
     clear();
     for (T t : il) {
-        insert(t); // WILL PROB INCREASE % WHEN INSERT IS DONE
+        insert(t);
     }
     return *this;
 }
@@ -480,9 +480,7 @@ void BST <T> :: BNode :: addRight (BNode * pNode)
 template <typename T>
 void BST<T> :: BNode :: addLeft (const T & t)
 {
-    // does not increase %
     pLeft = new BNode(t);
-   
 }
 
 /******************************************************
@@ -492,7 +490,6 @@ void BST<T> :: BNode :: addLeft (const T & t)
 template <typename T>
 void BST<T> ::BNode::addLeft(T && t)
 {
-    // does not increase %
     pLeft = new BNode(t);
 }
 
@@ -503,7 +500,6 @@ void BST<T> ::BNode::addLeft(T && t)
 template <typename T>
 void BST <T> :: BNode :: addRight (const T & t)
 {
-    // does not increase %
     pRight = new BNode(t);
 }
 
@@ -514,7 +510,6 @@ void BST <T> :: BNode :: addRight (const T & t)
 template <typename T>
 void BST <T> ::BNode::addRight(T && t)
 {
-    // does not increase %
     pRight = new BNode(t);
 }
 
