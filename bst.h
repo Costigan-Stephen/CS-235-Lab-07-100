@@ -382,15 +382,6 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
 template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {  
-    //if(it.pNode)
-        /*if (it.pNode->pRight != nullptr && it.pNode->pLeft != nullptr) {
-            if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode) {
-                it.pNode->pParent->pRight = nullptr;
-            }
-            if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode) {
-                it.pNode->pParent->pLeft = nullptr;
-            }
-        }*/
     if (it.pNode == nullptr)
         return it;
 
@@ -408,7 +399,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
     }
 
     // One Child Right
-     else if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) {
+    else if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) {
         if (it.pNode->pParent != nullptr) {
             if (it.pNode->pParent->pRight == it.pNode) {
                 it.pNode->pParent->pRight = nullptr;
@@ -477,6 +468,7 @@ void BST <T> ::clear() noexcept
       pThis = nullptr;
       numElements--;
    }
+
 /****************************************************
  * BST :: REMOVENODE (Created by Steve)
  * Remove the specified node
@@ -688,45 +680,6 @@ typename BST <T> :: iterator & BST <T> :: iterator :: operator -- ()
     return *this;
 }
 
-///**********************************************
-// * assign
-// * copy the values from pSrc onto pDest preserving
-// * as many of the nodes as possible.
-// *********************************************/
-//template <typename T>
-//void BST<T> ::BNode::assign(BST<T> ::BNode* pDest, const BST<T> ::BNode* pSrc)
-//{
-//    // Source is Empty
-//    if (!pSrc) {
-//        clear(pDest);
-//        return;
-//    }
-//
-//    // Copy root values, but only at root level
-//    if (!pDest->pParent) {
-//        
-//    }
-//
-//    // Neither the Source nor Destination are Empty
-//    if (pDest && pSrc) {
-//        pDest->data = pSrc->data;
-//        assign(pDest->pRight, pSrc->pRight);
-//        assign(pDest->pLeft, pSrc->pLeft);
-//    }
-//
-//    // Destination is Empty
-//    if (!pDest && pSrc) {
-//        pDest = new BST::BNode(pSrc->data);
-//        assign(pDest->pRight, pSrc->pRight);
-//        assign(pDest->pLeft, pSrc->pLeft);
-//    }
-//
-//    // Setting parent values
-//    if (pDest->pRight)
-//        pDest->pRight->pParent = pDest;
-//    if (pDest->pLeft)
-//        pDest->pLeft->pParent = pDest;
-//}
 
 /*****************************************************
  * DELETE BINARY TREE
