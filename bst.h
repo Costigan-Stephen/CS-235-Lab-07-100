@@ -439,7 +439,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
                 }
                 returnIt = it.pNode->pParent;
             }
-            //delete it.pNode;
+            delete it.pNode;
         }
         numElements--;
     }
