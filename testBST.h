@@ -2251,7 +2251,8 @@ public:
       //         30              60
       //     +----+----+
       //  [[20]]      40
-      assertUnit(itReturn == custom::BST <int> ::iterator(p20));
+      assertUnit(itReturn == custom::BST <int> ::iterator(p20));//FAIL
+      std::cout << custom::BST <int> ::iterator(p20).pNode->data << std::endl;
       assertUnit(bst.numElements == 5);
       assertUnit(bst.root == p50);
       assertUnit(p50->pLeft == p30);

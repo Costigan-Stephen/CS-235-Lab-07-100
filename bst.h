@@ -385,8 +385,10 @@ template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {  
     iterator returnIt = it;
+    if (it == end())
+        return end();
 
-    if (it.pNode != nullptr) {
+    if (returnIt.pNode != nullptr) {
 
         // No Children | COMPLETE
         if (it.pNode->pLeft == nullptr && it.pNode->pRight == nullptr) {
@@ -401,38 +403,33 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             }
             delete it.pNode;
         }
-
-        // One Child Right | 3 ERRORS TOTAL, 3 UNIQUE (SEE LEFT)
-        
-        else if (it.pNode->pRight == nullptr && it.pNode->pLeft) {
-            if (it.pNode->pParent != nullptr) {
-                if (it.pNode->pParent->pRight == it.pNode) {
-                    returnIt.pNode->pParent->pRight = it.pNode->pRight;
+        //one child | Complete        
+        else if (returnIt.pNode->pRight == nullptr && returnIt.pNode->pLeft) {
+            returnIt.pNode->pLeft->pParent = returnIt.pNode->pParent;
+            if (returnIt.pNode->pParent != nullptr) {
+                if (returnIt.pNode->pParent->pRight == returnIt.pNode) {
+                    returnIt.pNode->pParent->pRight = returnIt.pNode->pLeft;
                 }
-                if (it.pNode->pParent->pLeft == it.pNode) {
-                    returnIt.pNode->pParent->pLeft = it.pNode->pLeft;;
+                if (returnIt.pNode->pParent->pLeft == returnIt.pNode) {
+                    returnIt.pNode->pParent->pLeft = returnIt.pNode->pLeft;
+                }
+                returnIt = iterator(returnIt.pNode->pRight);
+                returnIt++;
+            }
+         }
+
+        else if (returnIt.pNode->pLeft == nullptr && returnIt.pNode->pRight) {
+            returnIt.pNode->pRight->pParent = returnIt.pNode->pParent;
+            if (returnIt.pNode->pParent) {
+                if (returnIt.pNode->pParent->pRight == returnIt.pNode) {
+                    returnIt.pNode->pParent->pRight = returnIt.pNode->pRight;
+                }
+                if (returnIt.pNode->pParent->pLeft == returnIt.pNode) {
+                    returnIt.pNode->pParent->pLeft = returnIt.pNode->pRight;
                 }
             }
-            delete it.pNode;
-        }
-
-        // One Child Left | 3 ERRORS TOTAL, 3 UNIQUE
-        /*
-        *  TestBST::test_erase_oneChild()
-                line:2254 condition:itReturn == custom::BST <int> ::iterator(p20)
-                line:2257 condition:p50->pLeft == p30
-                line:2261 condition:p30->pParent == p50
-        */
-        else if (it.pNode->pLeft == nullptr && it.pNode->pRight) {
-            if (it.pNode->pParent) {
-                if (it.pNode->pParent->pRight == it.pNode) {
-                    returnIt.pNode->pParent->pRight = it.pNode->pRight;
-                }
-                if (it.pNode->pParent->pLeft == it.pNode) {
-                    returnIt.pNode->pParent->pLeft = it.pNode->pLeft;
-                }
-            }
-            delete it.pNode;
+         returnIt++;
+            
         }
 
         // two Children | 8 ERRORS TOTAL, 3 UNIQUE
@@ -457,7 +454,7 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
                 }
                 returnIt = it.pNode->pParent;
             }
-            delete it.pNode;
+             it.pNode;
         }
         numElements--;
     }
