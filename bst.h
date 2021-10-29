@@ -130,7 +130,6 @@ public:
    void addLeft (      T && t);
    void addRight(      T && t);
 
-   //void assign(BNode* pDest, const BNode* pSrc);
    void clear(BNode* pThis);
    
 
@@ -229,7 +228,6 @@ BST <T> & BST <T> :: operator = (const BST <T> & rhs)
                 line:240 condition:bst.root != nullptr
                 line:240 condition:bst.root != nullptr
     */
-    clear();
     assign(root, rhs.root);
     numElements = rhs.numElements;
     return *this;
