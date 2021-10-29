@@ -285,11 +285,6 @@ void BST <T> ::assign(BNode*& pDest, const BNode* pSrc)
         return;
     }
 
-    // Copy root values, but only at root level
-    if (!pDest->pParent) {
-        
-    }
-
     // Neither the Source nor Destination are Empty
     if (pDest && pSrc) {
         pDest->data = pSrc->data;
@@ -452,7 +447,6 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
-
     clear(root);
     root = nullptr;
     numElements = 0;
