@@ -99,6 +99,7 @@ private:
    class BNode;
    BNode * root;              // root node of the binary search tree
    void removeNode(BNode* pNode);
+   void clear(BNode*& pThis);
    size_t numElements;        // number of elements currently in the tree
 };
 
@@ -362,21 +363,26 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
-   
-   //Example from pList
-   // loop is unnecessary for the checks, but probably good practice
-//   while (pParent != NULL)
-//   {
-//      BNode* pDelete = pParent;
-//       pParent = pHead->pNext;
-//       delete pDelete;
-//   }
-//   pTail = nullptr;
- 
-   root = nullptr;
-   numElements = 0;
+   clear(root);
+   return;
 }
 
+/*****************************************************
+    * BST :: CLEAR (RECURSIVE)
+    * Removes all the BNodes from a tree
+    ****************************************************/
+   template <typename T>
+   void BST <T> ::clear(BNode*& pThis)
+   {
+      if (!pThis)
+         return;
+
+      clear(pThis->pLeft);
+      clear(pThis->pRight);
+      delete pThis;
+      pThis = nullptr;
+      numElements--;
+   }
 /****************************************************
  * BST :: REMOVENODE (Created by Steve)
  * Remove the specified node
