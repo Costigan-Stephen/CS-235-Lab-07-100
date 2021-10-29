@@ -324,25 +324,24 @@ std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, boo
 
     if (keepUnique)
         it = find(t);
-
-    if (it == nullptr) {
-
+    if (it == nullptr)
+    {
         if (t < root->data)
         {
-            root->addLeft(t);
-            root->pLeft->pParent = root;
+            root->addLeft(std::move(t));
+            root->pLeft->pParent = std::move(root);
             it = iterator(root->pLeft);
         }
         else
         {
-            root->addRight(t);
-            root->pRight->pParent = root;
+            root->addRight(std::move(t));
+            root->pRight->pParent = std::move(root);
             it = iterator(root->pRight);
         }
 
         numElements++;
-
     }
+
     std::pair<iterator, bool> pairReturn(it, false);
     return pairReturn;
 }
@@ -525,22 +524,14 @@ template <typename T>
 typename BST <T> :: iterator BST<T> :: find(const T & t)
 {
     BNode* p = root;
-    iterator it = iterator(p);
-    while (p != nullptr)
+    while (p)
     {
-        it++;
         if (p->data == t)
-        {
             return iterator(p);
-        }
         else if (p->data < t)
-        {
             p = p->pRight;
-        }
         else
-        {
             p = p->pLeft;
-        }  
     }
    return iterator(p);
 }
