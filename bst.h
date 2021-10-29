@@ -587,7 +587,7 @@ void BST<T> :: BNode :: addLeft (const T & t)
 template <typename T>
 void BST<T> ::BNode::addLeft(T && t)
 {
-    pLeft = new BNode(t);
+    pLeft = new BNode(std::move(t));
 }
 
 /******************************************************
@@ -607,7 +607,7 @@ void BST <T> :: BNode :: addRight (const T & t)
 template <typename T>
 void BST <T> :: BNode :: addRight (T && t)
 {
-    pRight = new BNode(t);
+    pRight = new BNode(std::move(t));
 }
 
 /*************************************************
