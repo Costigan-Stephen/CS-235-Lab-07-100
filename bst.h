@@ -71,7 +71,6 @@ public:
    //
    iterator find(const T& t);
 
-
    // 
    // Insert
    //
@@ -135,7 +134,7 @@ public:
    // 
    // Status
    //
-   bool isRightChild(BNode* pNode) const { return pNode->data > pNode->pParent->data; } // DON'T KNOW IF IT CHANGES ANYTHING
+   bool isRightChild(BNode* pNode) const { return pNode->pParent->data < pNode->data; } // DON'T KNOW IF IT CHANGES ANYTHING
    bool isLeftChild (BNode* pNode) const { return pNode->data < pNode->pParent->data; } // <-/
 
    //
@@ -235,7 +234,7 @@ BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
 {
     clear();
     for (T t : il) {
-        insert(t); // WILL PROB INCREASE % WHEN INSERT IS DONE
+        insert(t);
     }
     return *this;
 }
@@ -247,6 +246,7 @@ BST <T> & BST <T> :: operator = (const std::initializer_list<T>& il)
 template <typename T>
 BST <T> & BST <T> :: operator = (BST <T> && rhs)
 {
+    // This still isn't right, but I think it's because we don't have clear
     clear();
     swap(rhs);
     return *this;
@@ -275,15 +275,59 @@ void BST <T> :: swap (BST <T>& rhs)
 template <typename T>
 std::pair<typename BST <T> :: iterator, bool> BST <T> :: insert(const T & t, bool keepUnique)
 {
-   std::pair<iterator, bool> pairReturn(end(), false);
-   return pairReturn;
+    iterator it;
+
+    if (keepUnique)
+        it = find(t);
+
+    if (it == nullptr) {
+
+        if (t < root->data)
+        {
+            root->addLeft(t);
+            root->pLeft->pParent = root;
+            it = iterator(root->pLeft);
+        }
+        else
+        {
+            root->addRight(t);
+            root->pRight->pParent = root;
+            it = iterator(root->pRight);
+        }
+
+        numElements++;
+
+    }
+    std::pair<iterator, bool> pairReturn(it, false);
+    return pairReturn;
 }
 
 template <typename T>
 std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepUnique)
 {
-   std::pair<iterator, bool> pairReturn(end(), false);
-   return pairReturn;
+    iterator it;
+
+    if (keepUnique)
+        it = find(t);
+
+    if (it == nullptr) {
+
+        if (t < root->data)
+        {
+            root->addLeft(t);
+            root->pLeft->pParent = root;
+            it = iterator(root->pLeft);
+        }
+        else
+        {
+            root->addRight(t);
+            root->pRight->pParent = root;
+            it = iterator(root->pRight);
+        }
+        numElements++;
+    }
+    std::pair<iterator, bool> pairReturn(it, false);
+    return pairReturn;
 }
 
 /*************************************************
@@ -293,67 +337,56 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
 template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {  
-    /*// node is empty
+    //if(it.pNode)
+        /*if (it.pNode->pRight != nullptr && it.pNode->pLeft != nullptr) {
+            if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode) {
+                it.pNode->pParent->pRight = nullptr;
+            }
+            if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode) {
+                it.pNode->pParent->pLeft = nullptr;
+            }
+        }*/
     if (it.pNode == nullptr)
-    {
-        removeNode(it.pNode);
-        return end();
-    }
+        return it;
 
-    // node has no children
-    if (it.pNode->pRight == nullptr && it.pNode->pLeft == nullptr)
-    {
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-            it.pNode->pParent->pRight = nullptr;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-            it.pNode->pParent->pLeft = nullptr;
-        removeNode(it.pNode);
-        return end();
-    }
-    //one child
-    if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) // right exists, left does not
-    {
-        it.pNode->pLeft->pParent = it.pNode->pParent;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-            it.pNode->pParent->pRight = it.pNode->pLeft;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-            it.pNode->pParent->pLeft = it.pNode->pLeft;
-        removeNode(it.pNode);
-        return end();
-    }
-    if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr) // left exists, right does not
-    {
-        it.pNode->pRight->pParent = it.pNode->pParent;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode)
-            it.pNode->pParent->pRight = it.pNode->pRight;
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode)
-            it.pNode->pParent->pLeft = it.pNode->pRight;
-        removeNode(it.pNode);
-        return end();
-    }
-    else if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr) // node has two children
-    {
-        BNode* newNode = it.pNode;
-        if (newNode->pRight != nullptr)
-        {
-            newNode = newNode->pRight;
-            while (newNode->pLeft != nullptr)
-            {
-                newNode = newNode->pLeft;
+    // One Child Right
+    if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) {
+        if (it.pNode->pParent != nullptr) {
+            if (it.pNode->pParent->pRight == it.pNode) {
+                it.pNode->pParent->pRight = nullptr;
             }
-            it.pNode->data = newNode->data;
-            newNode->pParent->pLeft = nullptr;
-            if (newNode->pRight != nullptr)
-            {
-                newNode->pRight->pParent = newNode->pParent;
-                newNode->pParent->pLeft = newNode->pRight;
-                newNode->pRight = nullptr;
+            if (it.pNode->pLeft == it.pNode) {
+                it.pNode->pParent->pLeft = nullptr;
             }
-            delete newNode;
-            newNode = nullptr;
+            delete it.pNode;
         }
-    }*/ 
-    return end();
+    }
+    // One Child Left
+    if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr) {
+        if (it.pNode->pParent != nullptr) {
+            if (it.pNode->pParent->pRight == it.pNode) {
+                it.pNode->pParent->pRight = nullptr;
+            }
+            if (it.pNode->pLeft == it.pNode) {
+                it.pNode->pParent->pLeft = nullptr;
+            }
+            delete it.pNode;
+        }
+    }
+    // two Children
+    /*if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr) {
+        if (it.pNode->pParent != nullptr) {
+            if (it.pNode->pParent->pRight == it.pNode) {
+                it.pNode->pParent->pRight = it.pNode->pParent;
+            }
+            if (it.pNode->pLeft == it.pNode) {
+                it.pNode->pParent->pLeft = it.pNode->pParent;
+            }
+            delete it.pNode;
+        }
+    }*/
+
+    return it;
 }
 
 /*****************************************************
@@ -363,8 +396,10 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
+
    clear(root);
-   return;
+    root = nullptr;
+    numElements = 0;
 }
 
 /*****************************************************
@@ -390,26 +425,17 @@ void BST <T> ::clear() noexcept
 template<typename T>
 inline void BST<T>::removeNode(BNode* pNode)
 {
-    if (pNode == nullptr)
-        delete pNode;
-
-    BNode * pNext = (pNode->isRightChild(pNode) ? pNode->pRight : pNode->pLeft);
-    
-    if (pNode != this->root)
-    {
-        if (pNode->pParent->pLeft == pNode)
+    if (pNode) {
+        if (pNode->pLeft)
         {
-            pNode->pParent->pLeft = pNext;
+            removeNode(pNode->pLeft);
+            delete pNode->pLeft;
         }
-        else
+        if (pNode->pRight)
         {
-            pNode->pParent->pRight = pNext;
+            removeNode(pNode->pRight);
+            delete pNode->pRight;
         }
-    }
-    else
-    {
-        this->root = pNext;
-        pNext->pParent = nullptr;
     }
     delete pNode;
 }
@@ -500,10 +526,7 @@ void BST <T> :: BNode :: addRight (BNode * pNode)
 template <typename T>
 void BST<T> :: BNode :: addLeft (const T & t)
 {
-    // does not increase %
-    if (t)
-        pLeft->data = new BNode(t);
-   
+    pLeft = new BNode(t);
 }
 
 /******************************************************
@@ -513,9 +536,7 @@ void BST<T> :: BNode :: addLeft (const T & t)
 template <typename T>
 void BST<T> ::BNode::addLeft(T && t)
 {
-    // does not increase %
-    if (t)
-        pLeft->data = new BNode(t);
+    pLeft = new BNode(t);
 }
 
 /******************************************************
@@ -525,9 +546,7 @@ void BST<T> ::BNode::addLeft(T && t)
 template <typename T>
 void BST <T> :: BNode :: addRight (const T & t)
 {
-    // does not increase %
-    if (t)
-        pRight->data = new BNode(t);
+    pRight = new BNode(t);
 }
 
 /******************************************************
@@ -535,11 +554,9 @@ void BST <T> :: BNode :: addRight (const T & t)
  * Add a node to the right of the current node
  ******************************************************/
 template <typename T>
-void BST <T> ::BNode::addRight(T && t)
+void BST <T> :: BNode :: addRight (T && t)
 {
-    // does not increase %
-    if (t)
-        pRight->data = new BNode(t);
+    pRight = new BNode(t);
 }
 
 /*************************************************
@@ -667,12 +684,13 @@ void BST<T> ::BNode::assign(BST<T> ::BNode* pDest, const BST<T> ::BNode* pSrc)
 template <class T>
 void BST<T>::BNode::clear(BNode* pThis)
 {
-    if (!pThis)
+    if (pThis == nullptr)
         return;
-
-    clear(pThis->pLeft);
-    clear(pThis->pRight);
-    pThis = NULL;
+    if(pThis->pLeft != nullptr)
+        clear(pThis->pLeft);
+    if (pThis->pRight != nullptr)
+        clear(pThis->pRight);
+    pThis = nullptr;
 }
 
 } // namespace custom
