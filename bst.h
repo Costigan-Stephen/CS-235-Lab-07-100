@@ -71,7 +71,6 @@ public:
    //
    iterator find(const T& t);
 
-
    // 
    // Insert
    //
@@ -324,9 +323,7 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
             root->pRight->pParent = root;
             it = iterator(root->pRight);
         }
-
         numElements++;
-
     }
     std::pair<iterator, bool> pairReturn(it, false);
     return pairReturn;
@@ -339,8 +336,49 @@ std::pair<typename BST <T> ::iterator, bool> BST <T> ::insert(T && t, bool keepU
 template <typename T>
 typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 {  
-    
-    return end();
+    //if(it.pNode)
+        /*if (it.pNode->pRight != nullptr && it.pNode->pLeft != nullptr) {
+            if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode) {
+                it.pNode->pParent->pRight = nullptr;
+            }
+            if (it.pNode->pParent != nullptr && it.pNode->pParent->pLeft == it.pNode) {
+                it.pNode->pParent->pLeft = nullptr;
+            }
+        }*/
+    if (it.pNode == nullptr || it.pNode->pParent == nullptr)
+        return it;
+    // One Child Right
+    if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) {
+        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode) {
+            it.pNode->pParent->pRight = nullptr;
+        }
+        if (it.pNode->pParent != nullptr && it.pNode->pLeft == it.pNode) {
+            it.pNode->pParent->pLeft = nullptr;
+        }
+        delete it.pNode;
+    }
+    // One Child Left
+    if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr) {
+        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode) {
+            it.pNode->pParent->pRight = nullptr;
+        }
+        if (it.pNode->pParent != nullptr && it.pNode->pLeft == it.pNode) {
+            it.pNode->pParent->pLeft = nullptr;
+        }
+        delete it.pNode;
+    }
+    // two Children
+    /*if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr) {
+        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode) {
+            it.pNode->pParent->pRight = it.pNode->pParent;
+        }
+        if (it.pNode->pParent != nullptr && it.pNode->pLeft == it.pNode) {
+            it.pNode->pParent->pLeft = it.pNode->pParent;
+        }
+        delete it.pNode;
+    }*/
+
+    return it;
 }
 
 /*****************************************************
@@ -350,11 +388,10 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
 template <typename T>
 void BST <T> ::clear() noexcept
 {
-   // still need to remove all leaves from the tree
-    //removeNode(this->root);
+    // still need to remove all leaves from the tree
+    // removeNode(this->root);
     root = nullptr;
     numElements = 0;
-    
 }
 
 /****************************************************
@@ -492,7 +529,7 @@ void BST <T> :: BNode :: addRight (const T & t)
  * Add a node to the right of the current node
  ******************************************************/
 template <typename T>
-void BST <T> ::BNode::addRight(T && t)
+void BST <T> :: BNode :: addRight (T && t)
 {
     pRight = new BNode(t);
 }
@@ -622,12 +659,13 @@ void BST<T> ::BNode::assign(BST<T> ::BNode* pDest, const BST<T> ::BNode* pSrc)
 template <class T>
 void BST<T>::BNode::clear(BNode* pThis)
 {
-    if (!pThis)
+    if (pThis == nullptr)
         return;
-
-    clear(pThis->pLeft);
-    clear(pThis->pRight);
-    pThis = NULL;
+    if(pThis->pLeft != nullptr)
+        clear(pThis->pLeft);
+    if (pThis->pRight != nullptr)
+        clear(pThis->pRight);
+    pThis = nullptr;
 }
 
 } // namespace custom
