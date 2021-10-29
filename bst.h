@@ -345,37 +345,44 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
                 it.pNode->pParent->pLeft = nullptr;
             }
         }*/
-    if (it.pNode == nullptr || it.pNode->pParent == nullptr)
+    if (it.pNode == nullptr)
         return it;
+
     // One Child Right
     if (it.pNode->pRight == nullptr && it.pNode->pLeft != nullptr) {
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode) {
-            it.pNode->pParent->pRight = nullptr;
+        if (it.pNode->pParent != nullptr) {
+            if (it.pNode->pParent->pRight == it.pNode) {
+                it.pNode->pParent->pRight = nullptr;
+            }
+            if (it.pNode->pLeft == it.pNode) {
+                it.pNode->pParent->pLeft = nullptr;
+            }
+            delete it.pNode;
         }
-        if (it.pNode->pParent != nullptr && it.pNode->pLeft == it.pNode) {
-            it.pNode->pParent->pLeft = nullptr;
-        }
-        delete it.pNode;
     }
     // One Child Left
     if (it.pNode->pLeft == nullptr && it.pNode->pRight != nullptr) {
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode) {
-            it.pNode->pParent->pRight = nullptr;
+        if (it.pNode->pParent != nullptr) {
+            if (it.pNode->pParent->pRight == it.pNode) {
+                it.pNode->pParent->pRight = nullptr;
+            }
+            if (it.pNode->pLeft == it.pNode) {
+                it.pNode->pParent->pLeft = nullptr;
+            }
+            delete it.pNode;
         }
-        if (it.pNode->pParent != nullptr && it.pNode->pLeft == it.pNode) {
-            it.pNode->pParent->pLeft = nullptr;
-        }
-        delete it.pNode;
     }
     // two Children
     /*if (it.pNode->pLeft != nullptr && it.pNode->pRight != nullptr) {
-        if (it.pNode->pParent != nullptr && it.pNode->pParent->pRight == it.pNode) {
-            it.pNode->pParent->pRight = it.pNode->pParent;
+        if (it.pNode->pParent != nullptr) {
+            if (it.pNode->pParent->pRight == it.pNode) {
+                it.pNode->pParent->pRight = it.pNode->pParent;
+            }
+            if (it.pNode->pLeft == it.pNode) {
+                it.pNode->pParent->pLeft = it.pNode->pParent;
+            }
+            delete it.pNode;
         }
-        if (it.pNode->pParent != nullptr && it.pNode->pLeft == it.pNode) {
-            it.pNode->pParent->pLeft = it.pNode->pParent;
-        }
-        delete it.pNode;
     }*/
 
     return it;
