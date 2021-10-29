@@ -351,9 +351,10 @@ template <typename T>
 void BST <T> ::clear() noexcept
 {
    // still need to remove all leaves from the tree
- 
-   root = nullptr;
-   numElements = 0;
+    //removeNode(this->root);
+    root = nullptr;
+    numElements = 0;
+    
 }
 
 /****************************************************
@@ -363,26 +364,17 @@ void BST <T> ::clear() noexcept
 template<typename T>
 inline void BST<T>::removeNode(BNode* pNode)
 {
-    if (pNode == nullptr)
-        delete pNode;
-
-    BNode * pNext = (pNode->isRightChild(pNode) ? pNode->pRight : pNode->pLeft);
-    
-    if (pNode != this->root)
-    {
-        if (pNode->pParent->pLeft == pNode)
+    if (pNode) {
+        if (pNode->pLeft)
         {
-            pNode->pParent->pLeft = pNext;
+            removeNode(pNode->pLeft);
+            delete pNode->pLeft;
         }
-        else
+        if (pNode->pRight)
         {
-            pNode->pParent->pRight = pNext;
+            removeNode(pNode->pRight);
+            delete pNode->pRight;
         }
-    }
-    else
-    {
-        this->root = pNext;
-        pNext->pParent = nullptr;
     }
     delete pNode;
 }
