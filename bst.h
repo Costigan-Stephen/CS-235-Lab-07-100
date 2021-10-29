@@ -418,17 +418,12 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
         // One Child Left
         else if (it.pNode->pLeft == nullptr && it.pNode->pRight) {
             if (it.pNode->pParent) {
-                std::cout << "IT.PNODE->PPARENT TRUE" << std::endl;
                 if (it.pNode->pParent->pRight == it.pNode) {
-                    std::cout << "IT.PNODE->PPARENT->PRIGHT TRUE" << std::endl;
                     returnIt.pNode->pParent->pRight = it.pNode->pRight;
                 }
                 if (it.pNode->pParent->pLeft == it.pNode) {
-                    std::cout << "IT.PNODE->PPARENT->PLEFT TRUE" << std::endl;
                     returnIt.pNode->pParent->pLeft = it.pNode->pLeft;
                 }
-                std::cout << "RETURNIT VALUE:: ";
-                std::cout << returnIt.pNode;
             }
             //delete it.pNode;
         }
