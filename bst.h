@@ -433,7 +433,6 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
             while (pIOS->pLeft != nullptr)
                 pIOS = pIOS->pLeft;
 
-            assert(pIOS->pLeft == nullptr);
             pIOS->pLeft = it.pNode->pLeft;
             if (it.pNode->pLeft)
                 it.pNode->pLeft->pParent = pIOS;
@@ -443,8 +442,6 @@ typename BST <T> ::iterator BST <T> :: erase(iterator & it)
                 if (pIOS->pRight)
                     pIOS->pRight->pParent = pIOS->pParent;
                 pIOS->pParent->pLeft = pIOS->pRight;
-
-                assert(it.pNode->pRight != nullptr);
                 pIOS->pRight = it.pNode->pRight;
                 it.pNode->pRight->pParent = pIOS;
             }
